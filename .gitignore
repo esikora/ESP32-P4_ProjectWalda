@@ -1,0 +1,51 @@
+# VS Code workspace
+.vscode/
+*.code-workspace
+
+# ESP-IDF build output
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+
+# ESP-IDF configuration
+sdkconfig
+sdkconfig.old
+# Keep sdkconfig.defaults under version control
+!sdkconfig.defaults
+
+# Managed components
+managed_components/
+dependencies.lock
+
+# Compiled binaries and maps
+*.bin
+*.elf
+*.map
+
+# Partition tables (generated)
+partition_table/
+*.csv
+*.bin
+
+# LVGL generated assets (fonts, images, cache)
+lvgl_assets/
+lvgl_cache/
+
+# BSP-specific generated files
+bsp_generated/
+board_support_package/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Backup files
+*~
