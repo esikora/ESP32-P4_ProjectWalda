@@ -25,6 +25,7 @@
 
 #include "fonts/lv_font_dejavu_16_german.c"
 #include "fonts/lv_font_dejavu_18_german.c"
+#include "fonts/lv_font_dejavu_20_german.c"
 #include "fonts/lv_font_dejavu_24_german.c"
 
 #include "quiz_data.h"  // Contains quiz question data
@@ -268,7 +269,7 @@ static void create_quiz_ui_once(void)
         lv_obj_t *letter = lv_label_create(ui.buttons[i]);
         lv_label_set_text(letter, (i == 0) ? "A" : (i == 1) ? "B" : "C");
         lv_obj_set_style_text_color(letter, WWTBAM_GOLD, LV_PART_MAIN);
-        lv_obj_set_style_text_font(letter, &lv_font_montserrat_20, LV_PART_MAIN);
+        lv_obj_set_style_text_font(letter, &lv_font_dejavu_20_german, LV_PART_MAIN);
         lv_obj_center(letter);
 
         // Answer text OUTSIDE the button, inside the frame
