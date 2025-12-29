@@ -23,6 +23,7 @@
 #include "iot_button.h"
 #include "button_gpio.h"
 
+#include "fonts/lv_font_dejavu_16_german.c"
 #include "fonts/lv_font_dejavu_18_german.c"
 #include "fonts/lv_font_dejavu_24_german.c"
 
@@ -196,7 +197,7 @@ static void create_quiz_ui_once(void)
 
     // Score label (top-left)
     ui.score_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_font(ui.score_label, &lv_font_montserrat_16, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui.score_label, &lv_font_dejavu_16_german, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui.score_label, WWTBAM_WHITE, LV_PART_MAIN);
     lv_obj_align(ui.score_label, LV_ALIGN_TOP_LEFT, 10, 10);
 
@@ -224,7 +225,7 @@ static void create_quiz_ui_once(void)
 
     // Additional label for fail instructions (only used in FAIL state)
     ui.fail_instr_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_font(ui.fail_instr_label, &lv_font_montserrat_16, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui.fail_instr_label, &lv_font_dejavu_16_german, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui.fail_instr_label, LV_COLOR_WHITE, LV_PART_MAIN);
     lv_obj_align(ui.fail_instr_label, LV_ALIGN_BOTTOM_MID, 0, -20);
     lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
