@@ -315,9 +315,9 @@ static void create_quiz_ui_once(void)
 
     // Countdown label (bottom middle)
     ui.countdown_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_font(ui.countdown_label, &lv_font_montserrat_24, LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui.countdown_label, LV_COLOR_RED, LV_PART_MAIN);
-    lv_obj_align(ui.countdown_label, LV_ALIGN_BOTTOM_MID, 0, -20);
+    lv_obj_set_style_text_font(ui.countdown_label, &lv_font_montserrat_18, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui.countdown_label, WWTBAM_GOLD, LV_PART_MAIN);
+    lv_obj_align(ui.countdown_label, LV_ALIGN_BOTTOM_LEFT, 10, -10);
 
     // Reaction label (center)
     ui.reaction_label = lv_label_create(ui.root);
@@ -325,7 +325,7 @@ static void create_quiz_ui_once(void)
     lv_obj_set_style_text_font(ui.reaction_label, &lv_font_montserrat_18, LV_PART_MAIN);
     lv_label_set_long_mode(ui.reaction_label, LV_LABEL_LONG_WRAP);
     lv_obj_set_width(ui.reaction_label, 600);
-    lv_obj_align(ui.reaction_label, LV_ALIGN_CENTER, 0, 40);
+    lv_obj_align(ui.reaction_label, LV_ALIGN_BOTTOM_MID, 0, -10);
     lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
 
     // Central label for winner/fail/shutdown screens
