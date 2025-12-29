@@ -33,6 +33,19 @@
 #define LV_COLOR_YELLOW  lv_color_make(0xFF, 0xFF, 0x00)
 #define LV_COLOR_ORANGE  lv_color_make(0xFF, 0xA5, 0x00)
 
+// WWTBAM Color Palette
+#define WWTBAM_BG            lv_color_make(0x00, 0x00, 0x33)   // deep navy
+#define WWTBAM_GOLD          lv_color_make(0xFF, 0xD7, 0x00)   // gold
+#define WWTBAM_BLUE          lv_color_make(0x00, 0x33, 0x99)   // bright blue
+#define WWTBAM_BLUE_DARK     lv_color_make(0x00, 0x22, 0x66)
+#define WWTBAM_WHITE         lv_color_make(0xFF, 0xFF, 0xFF)
+#define WWTBAM_ORANGE_DARK   lv_color_make(0xE6, 0x80, 0x00)
+#define WWTBAM_GREEN_DARK   lv_color_make(0x00, 0x66, 0x00)   // deeper green
+
+#define WWTBAM_HIGHLIGHT_BG     lv_color_make(0x33, 0x33, 0x99)   // glowing blue
+#define WWTBAM_HIGHLIGHT_BORDER lv_color_make(0x33, 0x99, 0xFF)   // electric blue
+
+
 // === Quiz data structures ====================================================
 
 typedef struct {
@@ -48,104 +61,104 @@ typedef struct {
 
 quiz_question_t quiz_questions[] = {
     {
-        "What is the capital of France?",
+        "Was ist die Hauptstadt von Frankreich?",
         "Paris",
         "London",
         "Berlin",
         'A',
         'L',
-        "Correct! Paris is the capital of France.",
-        "Wrong! The correct answer is Paris."
+        "Richtig! Paris ist die Hauptstadt von Frankreich.",
+        "Falsch! Die richtige Antwort ist Paris."
     },
     {
-        "Which planet is known as the Red Planet?",
+        "Welcher Planet ist als der Rote Planet bekannt?",
         "Venus",
         "Mars",
         "Jupiter",
         'B',
         'L',
-        "Correct! Mars is the Red Planet.",
-        "Wrong! Mars is the Red Planet."
+        "Richtig! Mars ist der Rote Planet.",
+        "Falsch! Mars ist der Rote Planet."
     },
     {
-        "What is 2 + 2?",
+        "Was ist 2 + 2?",
         "3",
         "4",
         "5",
         'B',
         'L',
-        "Correct! 2 + 2 = 4.",
-        "Wrong! 2 + 2 = 4."
+        "Richtig! 2 + 2 = 4.",
+        "Falsch! 2 + 2 = 4."
     },
     {
-        "Who wrote 'Romeo and Juliet'?",
+        "Wer schrieb 'Romeo und Julia'?",
         "Charles Dickens",
         "William Shakespeare",
         "Jane Austen",
         'B',
         'M',
-        "Correct! William Shakespeare wrote Romeo and Juliet.",
-        "Wrong! William Shakespeare wrote Romeo and Juliet."
+        "Richtig! William Shakespeare schrieb 'Romeo und Julia'.",
+        "Falsch! William Shakespeare schrieb 'Romeo und Julia'."
     },
     {
-        "What is the largest ocean on Earth?",
-        "Atlantic Ocean",
-        "Indian Ocean",
-        "Pacific Ocean",
+        "Welcher ist der größte Ozean der Erde?",
+        "Atlantischer Ozean",
+        "Indischer Ozean",
+        "Pazifischer Ozean",
         'C',
         'M',
-        "Correct! The Pacific Ocean is the largest.",
-        "Wrong! The Pacific Ocean is the largest."
+        "Richtig! Der Pazifische Ozean ist der größte.",
+        "Falsch! Der Pazifische Ozean ist der größte."
     },
     {
-        "In which year did World War II end?",
+        "In welchem Jahr endete der Zweite Weltkrieg?",
         "1944",
         "1945",
         "1946",
         'B',
         'M',
-        "Correct! World War II ended in 1945.",
-        "Wrong! World War II ended in 1945."
+        "Richtig! Der Zweite Weltkrieg endete 1945.",
+        "Falsch! Der Zweite Weltkrieg endete 1945."
     },
     {
-        "What is the chemical symbol for gold?",
+        "Was ist das chemische Symbol für Gold?",
         "Go",
         "Gd",
         "Au",
         'C',
         'H',
-        "Correct! Au is the symbol for gold.",
-        "Wrong! Au is the symbol for gold."
+        "Richtig! Au ist das chemische Symbol für Gold.",
+        "Falsch! Au ist das chemische Symbol für Gold."
     },
     {
-        "Which element has atomic number 1?",
+        "Welches Element hat die Ordnungszahl 1?",
         "Helium",
-        "Hydrogen",
+        "Wasserstoff",
         "Lithium",
         'B',
         'H',
-        "Correct! Hydrogen has atomic number 1.",
-        "Wrong! Hydrogen has atomic number 1."
+        "Richtig! Wasserstoff hat die Ordnungszahl 1.",
+        "Falsch! Wasserstoff hat die Ordnungszahl 1."
     },
     {
-        "What is the square root of 144?",
+        "Wie lautet die Quadratwurzel von 144?",
         "12",
         "14",
         "16",
         'A',
         'H',
-        "Correct! The square root of 144 is 12.",
-        "Wrong! The square root of 144 is 12."
+        "Richtig! Die Quadratwurzel von 144 ist 12.",
+        "Falsch! Die Quadratwurzel von 144 ist 12."
     },
     {
-        "Who painted the Mona Lisa?",
+        "Wer malte die Mona Lisa?",
         "Vincent van Gogh",
         "Leonardo da Vinci",
         "Pablo Picasso",
         'B',
         'H',
-        "Correct! Leonardo da Vinci painted the Mona Lisa.",
-        "Wrong! Leonardo da Vinci painted the Mona Lisa."
+        "Richtig! Leonardo da Vinci malte die Mona Lisa.",
+        "Falsch! Leonardo da Vinci malte die Mona Lisa."
     }
 };
 
@@ -197,6 +210,7 @@ typedef struct {
     lv_obj_t *score_label;
     lv_obj_t *fail_instr_label;
 
+    lv_obj_t *answer_frames[3];
     lv_obj_t *buttons[3];            // LVGL button widgets
 
     lv_obj_t *center_label;          // used for winner/fail/shutdown screens
@@ -256,51 +270,6 @@ static int select_random_question(void)
 
 // === UI creation & update functions (no deletes!) ===========================
 
-static void update_button_appearance(int btn_index)
-{
-    if (btn_index < 0 || btn_index >= NUM_BUTTONS) return;
-    if (!ui.buttons[btn_index]) return;
-
-    lv_color_t base_color = buttons[btn_index].color;
-    lv_color_t pressed_color = buttons[btn_index].is_pressed ?
-                               lv_color_darken(base_color, LV_OPA_50) : base_color;
-
-    lv_obj_set_style_bg_color(ui.buttons[btn_index], pressed_color, LV_PART_MAIN);
-
-    if (buttons[btn_index].is_pressed) {
-        lv_obj_set_style_shadow_width(ui.buttons[btn_index], 3, LV_PART_MAIN);
-        lv_obj_set_style_shadow_color(ui.buttons[btn_index], LV_COLOR_BLACK, LV_PART_MAIN);
-        lv_obj_set_style_shadow_opa(ui.buttons[btn_index], LV_OPA_50, LV_PART_MAIN);
-    } else {
-        lv_obj_set_style_shadow_width(ui.buttons[btn_index], 0, LV_PART_MAIN);
-    }
-}
-
-static void update_button_appearance_async(void *user_data)
-{
-    int btn_index = (int)user_data;
-    update_button_appearance(btn_index);
-}
-
-static void highlight_button(int btn_index, bool highlight)
-{
-    if (btn_index < 0 || btn_index >= NUM_BUTTONS) return;
-    if (!ui.buttons[btn_index]) return;
-
-    if (highlight) {
-        lv_obj_set_style_bg_color(ui.buttons[btn_index], LV_COLOR_YELLOW, LV_PART_MAIN);
-    } else {
-        lv_obj_set_style_bg_color(ui.buttons[btn_index], buttons[btn_index].color, LV_PART_MAIN);
-    }
-}
-
-static void reset_button_highlights(void)
-{
-    for (int i = 0; i < NUM_BUTTONS; i++) {
-        highlight_button(i, false);
-    }
-}
-
 static void create_quiz_ui_once(void)
 {
     if (ui.root) {
@@ -320,18 +289,28 @@ static void create_quiz_ui_once(void)
     lv_obj_set_style_bg_color(ui.root, LV_COLOR_WHITE, LV_PART_MAIN);
     lv_obj_clear_flag(ui.root, LV_OBJ_FLAG_SCROLLABLE);
 
-    // Question label
+    // QUESTION BOX (framed, centered)
     ui.question_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_font(ui.question_label, &lv_font_montserrat_20, LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui.question_label, LV_COLOR_BLACK, LV_PART_MAIN);
-    lv_obj_align(ui.question_label, LV_ALIGN_TOP_MID, 0, 20);
-    lv_label_set_long_mode(ui.question_label, LV_LABEL_LONG_WRAP);
     lv_obj_set_width(ui.question_label, 700);
+    lv_label_set_long_mode(ui.question_label, LV_LABEL_LONG_WRAP);
+    lv_obj_set_style_text_font(ui.question_label, &lv_font_montserrat_24, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui.question_label, WWTBAM_WHITE, LV_PART_MAIN);
+    lv_obj_set_style_text_align(ui.question_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+
+    // Frame styling
+    lv_obj_set_style_bg_color(ui.question_label, WWTBAM_BLUE_DARK, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(ui.question_label, LV_OPA_80, LV_PART_MAIN);
+    lv_obj_set_style_border_color(ui.question_label, WWTBAM_GOLD, LV_PART_MAIN);
+    lv_obj_set_style_border_width(ui.question_label, 2, LV_PART_MAIN);
+    lv_obj_set_style_radius(ui.question_label, 16, LV_PART_MAIN);
+    lv_obj_set_style_pad_all(ui.question_label, 20, LV_PART_MAIN);
+
+    lv_obj_align(ui.question_label, LV_ALIGN_TOP_MID, 0, 20);
 
     // Score label (top-left)
     ui.score_label = lv_label_create(ui.root);
     lv_obj_set_style_text_font(ui.score_label, &lv_font_montserrat_16, LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui.score_label, LV_COLOR_BLACK, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui.score_label, WWTBAM_WHITE, LV_PART_MAIN);
     lv_obj_align(ui.score_label, LV_ALIGN_TOP_LEFT, 10, 10);
 
     // Countdown label (bottom middle)
@@ -342,6 +321,7 @@ static void create_quiz_ui_once(void)
 
     // Reaction label (center)
     ui.reaction_label = lv_label_create(ui.root);
+    lv_obj_set_style_text_align(ui.reaction_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
     lv_obj_set_style_text_font(ui.reaction_label, &lv_font_montserrat_18, LV_PART_MAIN);
     lv_label_set_long_mode(ui.reaction_label, LV_LABEL_LONG_WRAP);
     lv_obj_set_width(ui.reaction_label, 600);
@@ -363,38 +343,69 @@ static void create_quiz_ui_once(void)
     lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
 
     // Create LVGL button widgets (3 buttons)
-    const int btn_width = 120;
-    const int btn_height = 80;
-    const int spacing = 40;
-    const int start_y = 120;
+    const int frame_width = 700;
+    const int frame_height = 80;
+    const int spacing = 20;
 
-    lv_coord_t screen_width = lv_display_get_horizontal_resolution(NULL);
-    lv_coord_t total_width = (btn_width * NUM_BUTTONS) + (spacing * (NUM_BUTTONS - 1));
-    lv_coord_t start_x = (screen_width - total_width) / 2;
+    for (int i = 0; i < 3; i++) {
 
-    const char *btn_labels[3] = {"A", "B", "C"};
+        // Outer frame (button + text)
+        ui.answer_frames[i] = lv_obj_create(ui.root);
+        lv_obj_set_size(ui.answer_frames[i], frame_width, frame_height);
+        lv_obj_align(ui.answer_frames[i], LV_ALIGN_CENTER, 0, (i - 1) * (frame_height + spacing));
 
-    for (int i = 0; i < NUM_BUTTONS; i++) {
-        ui.buttons[i] = lv_button_create(ui.root);
-        lv_obj_set_size(ui.buttons[i], btn_width, btn_height);
-        lv_obj_set_pos(ui.buttons[i], start_x + i * (btn_width + spacing), start_y);
-        lv_obj_set_style_bg_color(ui.buttons[i], buttons[i].color, LV_PART_MAIN);
-        lv_obj_set_style_border_color(ui.buttons[i], LV_COLOR_BLACK, LV_PART_MAIN);
-        lv_obj_set_style_border_width(ui.buttons[i], 2, LV_PART_MAIN);
-        lv_obj_set_style_radius(ui.buttons[i], 10, LV_PART_MAIN);
+        lv_obj_set_style_bg_color(ui.answer_frames[i], WWTBAM_BLUE_DARK, LV_PART_MAIN);
+        lv_obj_set_style_bg_opa(ui.answer_frames[i], LV_OPA_80, LV_PART_MAIN);
+        lv_obj_set_style_border_color(ui.answer_frames[i], WWTBAM_GOLD, LV_PART_MAIN);
+        lv_obj_set_style_border_width(ui.answer_frames[i], 2, LV_PART_MAIN);
+        lv_obj_set_style_radius(ui.answer_frames[i], 16, LV_PART_MAIN);
+        lv_obj_set_style_pad_all(ui.answer_frames[i], 10, LV_PART_MAIN);
 
-        // Label "A/B/C" at top
-        lv_obj_t *btn_label = lv_label_create(ui.buttons[i]);
-        lv_label_set_text(btn_label, btn_labels[i]);
-        lv_obj_align(btn_label, LV_ALIGN_TOP_MID, 0, 5);
-        lv_obj_set_style_text_color(btn_label, LV_COLOR_WHITE, LV_PART_MAIN);
-        lv_obj_set_style_text_font(btn_label, &lv_font_montserrat_12, LV_PART_MAIN);
+        // BUTTON inside the frame
+        ui.buttons[i] = lv_button_create(ui.answer_frames[i]);
+        lv_obj_set_size(ui.buttons[i], 120, 60);
+        lv_obj_align(ui.buttons[i], LV_ALIGN_LEFT_MID, 0, 0);
 
-        // Answer label at bottom
-        ui.answer_labels[i] = lv_label_create(ui.buttons[i]);
-        lv_obj_align(ui.answer_labels[i], LV_ALIGN_BOTTOM_MID, 0, -5);
-        lv_obj_set_style_text_color(ui.answer_labels[i], LV_COLOR_WHITE, LV_PART_MAIN);
-        lv_obj_set_style_text_font(ui.answer_labels[i], &lv_font_montserrat_10, LV_PART_MAIN);
+        lv_color_t btn_color =
+            (i == 0) ? WWTBAM_BLUE :
+            (i == 1) ? WWTBAM_GREEN_DARK :
+                    LV_COLOR_RED;
+
+        lv_obj_set_style_bg_color(ui.buttons[i], btn_color, LV_PART_MAIN);
+        lv_obj_set_style_border_color(ui.buttons[i], WWTBAM_GOLD, LV_PART_MAIN);
+        lv_obj_set_style_border_width(ui.buttons[i], 1, LV_PART_MAIN);
+        lv_obj_set_style_radius(ui.buttons[i], 12, LV_PART_MAIN);
+
+        // Letter label (A/B/C)
+        lv_obj_t *letter = lv_label_create(ui.buttons[i]);
+        lv_label_set_text(letter, (i == 0) ? "A" : (i == 1) ? "B" : "C");
+        lv_obj_set_style_text_color(letter, WWTBAM_GOLD, LV_PART_MAIN);
+        lv_obj_set_style_text_font(letter, &lv_font_montserrat_20, LV_PART_MAIN);
+        lv_obj_center(letter);
+
+        // Answer text OUTSIDE the button, inside the frame
+        ui.answer_labels[i] = lv_label_create(ui.answer_frames[i]);
+        lv_obj_set_style_text_color(ui.answer_labels[i], WWTBAM_WHITE, LV_PART_MAIN);
+        lv_obj_set_style_text_font(ui.answer_labels[i], &lv_font_montserrat_18, LV_PART_MAIN);
+        lv_obj_align(ui.answer_labels[i], LV_ALIGN_LEFT_MID, 150, 0);
+    }
+
+}
+
+static void highlight_answer_frame(int index)
+{
+    for (int i = 0; i < 3; i++) {
+        if (i == index) {
+            // Selected frame
+            lv_obj_set_style_bg_color(ui.answer_frames[i], WWTBAM_HIGHLIGHT_BG, LV_PART_MAIN);
+            lv_obj_set_style_border_color(ui.answer_frames[i], WWTBAM_HIGHLIGHT_BORDER, LV_PART_MAIN);
+            lv_obj_set_style_border_width(ui.answer_frames[i], 5, LV_PART_MAIN);
+        } else {
+            // Reset others
+            lv_obj_set_style_bg_color(ui.answer_frames[i], WWTBAM_BLUE_DARK, LV_PART_MAIN);
+            lv_obj_set_style_border_color(ui.answer_frames[i], WWTBAM_GOLD, LV_PART_MAIN);
+            lv_obj_set_style_border_width(ui.answer_frames[i], 2, LV_PART_MAIN);
+        }
     }
 }
 
@@ -402,7 +413,7 @@ static void update_score_display(void)
 {
     if (!ui.score_label) return;
     char buf[32];
-    snprintf(buf, sizeof(buf), "Score: %d", score);
+    snprintf(buf, sizeof(buf), "Punkte: %d", score);
     lv_label_set_text(ui.score_label, buf);
 }
 
@@ -410,7 +421,7 @@ static void update_countdown_display(void)
 {
     if (!ui.countdown_label) return;
     char buf[32];
-    snprintf(buf, sizeof(buf), "Time: %d", timer_remaining);
+    snprintf(buf, sizeof(buf), "Zeit: %d", timer_remaining);
     lv_label_set_text(ui.countdown_label, buf);
 }
 
@@ -418,10 +429,8 @@ static void show_question_ui(int q_index)
 {
     create_quiz_ui_once();
 
-    // Background normal
-    lv_obj_set_style_bg_color(ui.root, LV_COLOR_WHITE, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(ui.root, WWTBAM_BG, LV_PART_MAIN);
 
-    // Show quiz elements
     lv_obj_clear_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_clear_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_clear_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
@@ -429,19 +438,18 @@ static void show_question_ui(int q_index)
     lv_obj_add_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
 
-    for (int i = 0; i < NUM_BUTTONS; i++) {
-        lv_obj_clear_flag(ui.buttons[i], LV_OBJ_FLAG_HIDDEN);
+    highlight_answer_frame(-1);  // reset highlights 
+
+    for (int i = 0; i < 3; i++) {
+        lv_obj_clear_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
 
-    // Set question text
     lv_label_set_text(ui.question_label, quiz_questions[q_index].question);
 
-    // Set answer texts
     lv_label_set_text(ui.answer_labels[0], quiz_questions[q_index].answer_a);
     lv_label_set_text(ui.answer_labels[1], quiz_questions[q_index].answer_b);
     lv_label_set_text(ui.answer_labels[2], quiz_questions[q_index].answer_c);
 
-    reset_button_highlights();
     update_score_display();
 
     timer_remaining = get_timer_duration(quiz_questions[q_index].difficulty);
@@ -468,7 +476,7 @@ static void show_winner_ui(void)
 {
     create_quiz_ui_once();
 
-    lv_obj_set_style_bg_color(ui.root, LV_COLOR_GREEN, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(ui.root, WWTBAM_BLUE, LV_PART_MAIN);
 
     // Hide quiz elements
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
@@ -476,13 +484,12 @@ static void show_winner_ui(void)
     lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < NUM_BUTTONS; i++) {
-        lv_obj_add_flag(ui.buttons[i], LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
     lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
 
     // Show center label
     lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_set_style_text_color(ui.center_label, LV_COLOR_WHITE, LV_PART_MAIN);
     lv_label_set_text(ui.center_label, "Congratulations!\nYou won the quiz!");
 }
 
@@ -498,12 +505,11 @@ static void show_fail_ui(void)
     lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < NUM_BUTTONS; i++) {
-        lv_obj_add_flag(ui.buttons[i], LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
 
     // Show center + instruction
     lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_set_style_text_color(ui.center_label, LV_COLOR_WHITE, LV_PART_MAIN);
     lv_label_set_text(ui.center_label, "Game Over!\nTry again?");
 
     lv_obj_clear_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
@@ -514,7 +520,7 @@ static void show_shutdown_prompt_ui(void)
 {
     create_quiz_ui_once();
 
-    lv_obj_set_style_bg_color(ui.root, LV_COLOR_ORANGE, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(ui.root, WWTBAM_ORANGE_DARK, LV_PART_MAIN);
 
     // Hide quiz elements
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
@@ -522,13 +528,12 @@ static void show_shutdown_prompt_ui(void)
     lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < NUM_BUTTONS; i++) {
-        lv_obj_add_flag(ui.buttons[i], LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
     lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
 
     // Show center label
     lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_set_style_text_color(ui.center_label, LV_COLOR_BLACK, LV_PART_MAIN);
     lv_label_set_text(ui.center_label, "Press any button to shutdown");
 }
 
@@ -604,7 +609,6 @@ static void quiz_timer_callback(lv_timer_t *timer)
                 lv_timer_set_period(quiz_timer, 100);
             } else {
                 quiz_state = QUIZ_STATE_SHOWING_QUESTION;
-                reset_button_highlights();
                 lv_timer_set_period(quiz_timer, 100);
             }
             second_counter = 0;
@@ -648,7 +652,7 @@ static void handle_answer_async(void *user_data)
     }
 
     user_answer = 'A' + btn_index;
-    highlight_button(btn_index, true);
+    highlight_answer_frame(btn_index);
 
     bool correct = (user_answer == quiz_questions[current_question_index].correct);
     if (correct) {
@@ -720,10 +724,8 @@ static void button_event_cb(void *arg, void *data)
     // Visual button state
     if (BUTTON_PRESS_DOWN == event) {
         buttons[btn_index].is_pressed = true;
-        lv_async_call(update_button_appearance_async, (void *)btn_index);
     } else if (BUTTON_PRESS_UP == event || BUTTON_PRESS_END == event) {
         buttons[btn_index].is_pressed = false;
-        lv_async_call(update_button_appearance_async, (void *)btn_index);
 
         // Quiz logic (through async handlers)
         if (quiz_state == QUIZ_STATE_WAITING_ANSWER) {
