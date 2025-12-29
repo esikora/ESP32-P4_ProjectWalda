@@ -23,6 +23,11 @@
 #include "iot_button.h"
 #include "button_gpio.h"
 
+#include "fonts/lv_font_dejavu_18_german.c"
+#include "fonts/lv_font_dejavu_24_german.c"
+
+#include "quiz_data.h"  // Contains quiz question data
+
 // Define colors manually
 #define LV_COLOR_RED     lv_color_make(0xFF, 0x00, 0x00)
 #define LV_COLOR_GREEN   lv_color_make(0x00, 0xFF, 0x00)
@@ -45,124 +50,6 @@
 #define WWTBAM_HIGHLIGHT_BG     lv_color_make(0x33, 0x33, 0x99)   // glowing blue
 #define WWTBAM_HIGHLIGHT_BORDER lv_color_make(0x33, 0x99, 0xFF)   // electric blue
 
-
-// === Quiz data structures ====================================================
-
-typedef struct {
-    const char *question;
-    const char *answer_a;
-    const char *answer_b;
-    const char *answer_c;
-    char correct;            // 'A', 'B', 'C'
-    char difficulty;         // 'L', 'M', 'H'
-    const char *correct_reaction;
-    const char *wrong_reaction;
-} quiz_question_t;
-
-quiz_question_t quiz_questions[] = {
-    {
-        "Was ist die Hauptstadt von Frankreich?",
-        "Paris",
-        "London",
-        "Berlin",
-        'A',
-        'L',
-        "Richtig! Paris ist die Hauptstadt von Frankreich.",
-        "Falsch! Die richtige Antwort ist Paris."
-    },
-    {
-        "Welcher Planet ist als der Rote Planet bekannt?",
-        "Venus",
-        "Mars",
-        "Jupiter",
-        'B',
-        'L',
-        "Richtig! Mars ist der Rote Planet.",
-        "Falsch! Mars ist der Rote Planet."
-    },
-    {
-        "Was ist 2 + 2?",
-        "3",
-        "4",
-        "5",
-        'B',
-        'L',
-        "Richtig! 2 + 2 = 4.",
-        "Falsch! 2 + 2 = 4."
-    },
-    {
-        "Wer schrieb 'Romeo und Julia'?",
-        "Charles Dickens",
-        "William Shakespeare",
-        "Jane Austen",
-        'B',
-        'M',
-        "Richtig! William Shakespeare schrieb 'Romeo und Julia'.",
-        "Falsch! William Shakespeare schrieb 'Romeo und Julia'."
-    },
-    {
-        "Welcher ist der größte Ozean der Erde?",
-        "Atlantischer Ozean",
-        "Indischer Ozean",
-        "Pazifischer Ozean",
-        'C',
-        'M',
-        "Richtig! Der Pazifische Ozean ist der größte.",
-        "Falsch! Der Pazifische Ozean ist der größte."
-    },
-    {
-        "In welchem Jahr endete der Zweite Weltkrieg?",
-        "1944",
-        "1945",
-        "1946",
-        'B',
-        'M',
-        "Richtig! Der Zweite Weltkrieg endete 1945.",
-        "Falsch! Der Zweite Weltkrieg endete 1945."
-    },
-    {
-        "Was ist das chemische Symbol für Gold?",
-        "Go",
-        "Gd",
-        "Au",
-        'C',
-        'H',
-        "Richtig! Au ist das chemische Symbol für Gold.",
-        "Falsch! Au ist das chemische Symbol für Gold."
-    },
-    {
-        "Welches Element hat die Ordnungszahl 1?",
-        "Helium",
-        "Wasserstoff",
-        "Lithium",
-        'B',
-        'H',
-        "Richtig! Wasserstoff hat die Ordnungszahl 1.",
-        "Falsch! Wasserstoff hat die Ordnungszahl 1."
-    },
-    {
-        "Wie lautet die Quadratwurzel von 144?",
-        "12",
-        "14",
-        "16",
-        'A',
-        'H',
-        "Richtig! Die Quadratwurzel von 144 ist 12.",
-        "Falsch! Die Quadratwurzel von 144 ist 12."
-    },
-    {
-        "Wer malte die Mona Lisa?",
-        "Vincent van Gogh",
-        "Leonardo da Vinci",
-        "Pablo Picasso",
-        'B',
-        'H',
-        "Richtig! Leonardo da Vinci malte die Mona Lisa.",
-        "Falsch! Leonardo da Vinci malte die Mona Lisa."
-    }
-};
-
-#define NUM_QUIZ_QUESTIONS (sizeof(quiz_questions) / sizeof(quiz_question_t))
 
 typedef enum {
     QUIZ_STATE_IDLE,
@@ -293,7 +180,7 @@ static void create_quiz_ui_once(void)
     ui.question_label = lv_label_create(ui.root);
     lv_obj_set_width(ui.question_label, 700);
     lv_label_set_long_mode(ui.question_label, LV_LABEL_LONG_WRAP);
-    lv_obj_set_style_text_font(ui.question_label, &lv_font_montserrat_24, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui.question_label, &lv_font_dejavu_24_german, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui.question_label, WWTBAM_WHITE, LV_PART_MAIN);
     lv_obj_set_style_text_align(ui.question_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
 
@@ -315,14 +202,14 @@ static void create_quiz_ui_once(void)
 
     // Countdown label (bottom middle)
     ui.countdown_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_font(ui.countdown_label, &lv_font_montserrat_18, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui.countdown_label, &lv_font_dejavu_18_german, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui.countdown_label, WWTBAM_GOLD, LV_PART_MAIN);
     lv_obj_align(ui.countdown_label, LV_ALIGN_BOTTOM_LEFT, 10, -10);
 
     // Reaction label (center)
     ui.reaction_label = lv_label_create(ui.root);
     lv_obj_set_style_text_align(ui.reaction_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
-    lv_obj_set_style_text_font(ui.reaction_label, &lv_font_montserrat_18, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui.reaction_label, &lv_font_dejavu_18_german, LV_PART_MAIN);
     lv_label_set_long_mode(ui.reaction_label, LV_LABEL_LONG_WRAP);
     lv_obj_set_width(ui.reaction_label, 600);
     lv_obj_align(ui.reaction_label, LV_ALIGN_BOTTOM_MID, 0, -10);
@@ -330,7 +217,7 @@ static void create_quiz_ui_once(void)
 
     // Central label for winner/fail/shutdown screens
     ui.center_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_font(ui.center_label, &lv_font_montserrat_24, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui.center_label, &lv_font_dejavu_24_german, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui.center_label, LV_COLOR_WHITE, LV_PART_MAIN);
     lv_obj_align(ui.center_label, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
@@ -386,7 +273,7 @@ static void create_quiz_ui_once(void)
         // Answer text OUTSIDE the button, inside the frame
         ui.answer_labels[i] = lv_label_create(ui.answer_frames[i]);
         lv_obj_set_style_text_color(ui.answer_labels[i], WWTBAM_WHITE, LV_PART_MAIN);
-        lv_obj_set_style_text_font(ui.answer_labels[i], &lv_font_montserrat_18, LV_PART_MAIN);
+        lv_obj_set_style_text_font(ui.answer_labels[i], &lv_font_dejavu_18_german, LV_PART_MAIN);
         lv_obj_align(ui.answer_labels[i], LV_ALIGN_LEFT_MID, 150, 0);
     }
 
@@ -490,7 +377,7 @@ static void show_winner_ui(void)
 
     // Show center label
     lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.center_label, "Congratulations!\nYou won the quiz!");
+    lv_label_set_text(ui.center_label, "Herzlichen Glückwunsch!\n\nDu hast gewonnen!\n\nDer Code zum Finale lautet: 7777");
 }
 
 static void show_fail_ui(void)
@@ -510,10 +397,10 @@ static void show_fail_ui(void)
 
     // Show center + instruction
     lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.center_label, "Game Over!\nTry again?");
+    lv_label_set_text(ui.center_label, "Leider hat es nicht geklappt\n\nMöchtest du es nochmal versuchen?");
 
     lv_obj_clear_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.fail_instr_label, "Green: Restart\nLong Red: Shutdown");
+    lv_label_set_text(ui.fail_instr_label, "Grün: Neuer Versuch\nRot (lange drücken): Spiel beenden");
 }
 
 static void show_shutdown_prompt_ui(void)
@@ -581,7 +468,7 @@ static void quiz_timer_callback(lv_timer_t *timer)
             update_countdown_display();
             second_counter = 0;
 
-            if (timer_remaining < 0) {
+            if (timer_remaining <= 0) {
                 // Time's up
                 quiz_state = QUIZ_STATE_SHOWING_REACTION;
                 bool correct = false;
@@ -589,20 +476,20 @@ static void quiz_timer_callback(lv_timer_t *timer)
                 tries++;
                 update_score_display();
                 show_reaction_ui(correct);
-                lv_timer_set_period(quiz_timer, 3000); // show reaction 3 sec
+                lv_timer_set_period(quiz_timer, 2000); // show reaction 2 sec
                 second_counter = 0;
             }
         }
         break;
 
     case QUIZ_STATE_SHOWING_REACTION:
-        if (second_counter >= 3) {
+        if (second_counter >= 2) {
             if (score >= 10) {
                 quiz_state = QUIZ_STATE_WINNER;
                 winner_counter = 0;
                 show_winner_ui();
                 lv_timer_set_period(quiz_timer, 100);
-            } else if (tries >= 20) {
+            } else if (tries >= 25) {
                 quiz_state = QUIZ_STATE_FAIL;
                 fail_counter = 0;
                 show_fail_ui();
