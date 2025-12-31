@@ -358,13 +358,18 @@ static void show_question_ui(int q_index)
     update_countdown_display();
 }
 
-static void show_reaction_ui(bool correct)
+static void show_reaction_ui(bool correct, const char *custom_message)
 {
     if (!ui.reaction_label) return;
 
-    const char *reaction = correct ?
-                           quiz_questions[current_question_index].correct_reaction :
-                           quiz_questions[current_question_index].wrong_reaction;
+    const char *reaction;
+    if (custom_message) {
+        reaction = custom_message;
+    } else {
+        reaction = correct ?
+                   quiz_questions[current_question_index].correct_reaction :
+                   quiz_questions[current_question_index].wrong_reaction;
+    }
 
     lv_label_set_text(ui.reaction_label, reaction);
     lv_obj_set_style_text_color(ui.reaction_label,
@@ -528,7 +533,7 @@ static void quiz_timer_callback(lv_timer_t *timer)
                 if (score > 0) score--;
                 tries++;
                 update_score_display();
-                show_reaction_ui(correct);
+                show_reaction_ui(correct, "Die Zeit ist leider um!");
                 lv_timer_set_period(quiz_timer, 2000); // show reaction 2 sec
                 second_counter = 0;
             }
@@ -615,7 +620,7 @@ static void handle_answer_async(void *user_data)
 
     ESP_LOGI("QUIZ", "handle_answer_async: Setting state to SHOWING_REACTION");
     quiz_state = QUIZ_STATE_SHOWING_REACTION;
-    show_reaction_ui(correct);
+    show_reaction_ui(correct, NULL);
     lv_timer_set_period(quiz_timer, 3000); // 3 seconds reaction
 }
 
