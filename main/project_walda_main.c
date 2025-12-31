@@ -196,7 +196,7 @@ static void create_quiz_ui_once(void)
 
     lv_obj_set_style_text_font(ui.instructions_label, &lv_font_dejavu_20_german, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui.instructions_label, WWTBAM_BLUE_LIGHT, LV_PART_MAIN);
-    lv_obj_set_style_text_align(ui.instructions_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_obj_set_style_text_align(ui.instructions_label, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN);
 
     lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
 
@@ -391,7 +391,7 @@ static void show_winner_ui(void)
 {
     create_quiz_ui_once();
 
-    lv_obj_set_style_bg_color(ui.root, WWTBAM_BLUE, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(ui.root, WWTBAM_BG, LV_PART_MAIN);
 
     // Hide quiz elements
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
@@ -401,18 +401,25 @@ static void show_winner_ui(void)
     for (int i = 0; i < NUM_BUTTONS; i++) {
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
-    lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
 
-    // Show center label
+    // Show title label
     lv_obj_clear_flag(ui.title_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.title_label, "Herzlichen Glückwunsch!\n\nDu hast gewonnen!\n\nDer Code zum Finale lautet: 7777");
+    lv_label_set_text(ui.title_label, "Herzlichen Glückwunsch!");
+
+    // Show instructions label with additional info
+    lv_obj_clear_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui.instructions_label,
+        "Du hast das Quiz gewonnen!\n"
+        "Der Code zum Finale lautet:\n\n"
+        "7777"
+    );
 }
 
 static void show_fail_ui(void)
 {
     create_quiz_ui_once();
 
-    lv_obj_set_style_bg_color(ui.root, LV_COLOR_RED, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(ui.root, WWTBAM_BG, LV_PART_MAIN);
 
     // Hide quiz elements
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
@@ -422,35 +429,32 @@ static void show_fail_ui(void)
     for (int i = 0; i < NUM_BUTTONS; i++) {
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
-    lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
 
-    // Show center + instruction
+    // Show title label
     lv_obj_clear_flag(ui.title_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.title_label, "Leider hat es nicht geklappt\n\nMöchtest du es nochmal versuchen?");
+    lv_label_set_text(ui.title_label, "Oh nein, du hast leider verloren!");
 
+    // Show instructions label with question
+    lv_obj_clear_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui.instructions_label, "Möchtest du es nochmal versuchen?");
+
+    // Show system message with button instructions
     lv_obj_clear_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.system_message_label, "Grün: Neuer Versuch\nRot (lange drücken): Spiel beenden");
+    lv_obj_set_style_text_color(ui.system_message_label, WWTBAM_GOLD, LV_PART_MAIN);
+    lv_label_set_text(ui.system_message_label,
+        "Betätige die grüne Taste für einen neuen Versuch.\n"
+        "Halte die rote Taste gedrückt, um das Spiel zu beenden.");
 }
 
 static void show_shutdown_prompt_ui(void)
 {
     create_quiz_ui_once();
 
-    lv_obj_set_style_bg_color(ui.root, WWTBAM_ORANGE_DARK, LV_PART_MAIN);
-
-    // Hide quiz elements
-    lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
-    for (int i = 0; i < NUM_BUTTONS; i++) {
-        lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
-    }
-    lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
-
-    // Show center label
-    lv_obj_clear_flag(ui.title_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.title_label, "Press any button to shutdown");
+    // Keep the winner UI background and content
+    // Show system message at bottom
+    lv_obj_clear_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui.system_message_label, "Drücke eine beliebige Taste, um das Spiel zu beenden.");
+    lv_obj_set_style_text_color(ui.system_message_label, WWTBAM_GOLD, LV_PART_MAIN);
 }
 
 static void show_start_screen_ui(void)
@@ -476,17 +480,19 @@ static void show_start_screen_ui(void)
     // Show instructions label
     lv_obj_clear_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
     lv_label_set_text(ui.instructions_label,
-        "Für eine richtige Antwort bekommst du einen Punkt.\n"
-        "Für eine falsche Antwort wird ein Punkt abgezogen.\n"
-        "Danach geht es automatisch mit der nächsten Frage weiter.\n"
-        "Bei 10 Punkten erhälst du eine Belohnung.\n"
-        "Nach 50 Versuchen ist das Spiel vorbei."
+        "Spielregeln:\n"
+        "1. Antworte innerhalb der vorgegebenen Zeit!\n"
+        "2. Für eine richtige Antwort bekommst du einen Punkt.\n"
+        "3. Für eine falsche Antwort wird ein Punkt abgezogen.\n"
+        "4. Die nächste Frage erscheint automatisch.\n"
+        "5. Bei 10 Punkten erhälst du eine Belohnung.\n"
+        "6. Nach höchstens 50 Versuchen ist das Spiel vorbei."
     );
 
     // Show system message to start
     lv_obj_clear_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_set_style_text_color(ui.system_message_label, WWTBAM_GOLD, LV_PART_MAIN);
-    lv_label_set_text(ui.system_message_label, "Drücke eine beliebige Taste, um zu starten");
+    lv_label_set_text(ui.system_message_label, "Betätige eine beliebige Taste, um zu starten.");
 }
 
 // === Quiz timer callback (only uses LVGL safely, no deletes) ================
@@ -667,6 +673,7 @@ static void handle_shutdown_async(void *user_data)
 {
     (void)user_data;
     esp_restart();
+    // esp_deep_sleep_start();
 }
 
 // === Button event callback (no direct LVGL calls, only lv_async_call) ========
@@ -727,16 +734,21 @@ static void button_event_cb(void *arg, void *data)
             ESP_LOGI("QUIZ", "Button %d pressed in SHUTDOWN_PROMPT state - scheduling shutdown", btn_index);
             lv_async_call(handle_shutdown_async, NULL);
         } else if (quiz_state == QUIZ_STATE_FAIL) {
-            uint32_t pressed_ms = iot_button_get_pressed_time(btn_handle);
             if (btn_index == 1) { // Green button - restart
                 ESP_LOGI("QUIZ", "Green button pressed in FAIL state - scheduling restart");
                 lv_async_call(handle_restart_async, NULL);
-            } else if (btn_index == 2 && pressed_ms > 2000) { // Long red press - shutdown
-                ESP_LOGI("QUIZ", "Red button long press in FAIL state - scheduling shutdown");
-                lv_async_call(handle_shutdown_async, NULL);
             }
+            // Removed long press shutdown from PRESS_UP
+        }
+    } else if (BUTTON_LONG_PRESS_HOLD == event && quiz_state == QUIZ_STATE_FAIL && btn_index == 2) {
+        uint32_t pressed_ms = iot_button_get_pressed_time(btn_handle);
+        if (pressed_ms >= 2000) {
+            ESP_LOGI("QUIZ", "Red button held for >2s in FAIL state - scheduling shutdown");
+            lv_async_call(handle_shutdown_async, NULL);
         }
     } else if (BUTTON_PRESS_END == event) {
+        // TODO: is this needed, or is BUTTON_PRESS_UP sufficient?
+
         // BUTTON_PRESS_END is handled separately for visual state only
         ESP_LOGV("BUTTON", "Button %d PRESS_END event - visual state only", btn_index);
         buttons[btn_index].is_pressed = false;
@@ -809,6 +821,7 @@ void app_main(void)
 
             button_event_args_t args = {
                 .multiple_clicks.clicks = 3,
+                .long_press.press_time = 2000
             };
             iot_button_register_cb(buttons[i].handle, BUTTON_MULTIPLE_CLICK, &args, button_event_cb, (void *)3);
 
