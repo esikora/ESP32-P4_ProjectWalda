@@ -45,11 +45,12 @@
 #define WWTBAM_GOLD          lv_color_make(0xFF, 0xD7, 0x00)   // gold
 #define WWTBAM_BLUE          lv_color_make(0x00, 0x33, 0x99)   // bright blue
 #define WWTBAM_BLUE_DARK     lv_color_make(0x00, 0x22, 0x66)
+#define WWTBAM_BLUE_LIGHT    lv_color_make(0x33, 0x99, 0xFF)   // electric blue
 #define WWTBAM_WHITE         lv_color_make(0xFF, 0xFF, 0xFF)
 #define WWTBAM_ORANGE_DARK   lv_color_make(0xE6, 0x80, 0x00)
-#define WWTBAM_GREEN_DARK   lv_color_make(0x00, 0x66, 0x00)   // deeper green
+#define WWTBAM_GREEN_DARK    lv_color_make(0x00, 0x66, 0x00)   // deeper green
 
-#define WWTBAM_HIGHLIGHT_BG     lv_color_make(0x33, 0x33, 0x99)   // glowing blue
+#define WWTBAM_HIGHLIGHT_BG     lv_color_make(0x44, 0x44, 0xAA)   // glowing blue
 #define WWTBAM_HIGHLIGHT_BORDER lv_color_make(0x33, 0x99, 0xFF)   // electric blue
 
 
@@ -93,14 +94,13 @@ static button_info_t buttons[NUM_BUTTONS];
 typedef struct {
     lv_obj_t *root;                  // main container
 
-    lv_obj_t *center_label;          // used for winner/fail/shutdown screens
-    lv_obj_t *start_instr_label;     // used for start screen instructions
+    lv_obj_t *title_label;          // used for start/winner/fail/shutdown screens
+    lv_obj_t *instructions_label;     // used for start screen instructions
     lv_obj_t *question_label;
     lv_obj_t *answer_labels[3];
     lv_obj_t *countdown_label;
-    lv_obj_t *reaction_label;
+    lv_obj_t *system_message_label;  // used for reactions and system instructions
     lv_obj_t *score_label;
-    lv_obj_t *fail_instr_label;
 
     lv_obj_t *answer_frames[3];
     lv_obj_t *buttons[3];            // LVGL button widgets
@@ -180,13 +180,47 @@ static void create_quiz_ui_once(void)
     lv_obj_set_style_bg_color(ui.root, LV_COLOR_WHITE, LV_PART_MAIN);
     lv_obj_clear_flag(ui.root, LV_OBJ_FLAG_SCROLLABLE);
 
-    // QUESTION BOX (framed, centered)
+    // Central label for start/winner/fail/shutdown screens
+    ui.title_label = lv_label_create(ui.root);
+    lv_obj_set_style_text_font(ui.title_label, &lv_font_dejavu_24_german, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui.title_label, WWTBAM_GOLD, LV_PART_MAIN);
+    lv_obj_align(ui.title_label, LV_ALIGN_TOP_MID, 0, 20);
+    lv_obj_add_flag(ui.title_label, LV_OBJ_FLAG_HIDDEN);
+
+    // Instructions label
+    ui.instructions_label = lv_label_create(ui.root);
+    lv_label_set_long_mode(ui.instructions_label, LV_LABEL_LONG_WRAP);
+    lv_obj_set_style_text_line_space(ui.instructions_label, 10, LV_PART_MAIN);
+    lv_obj_set_width(ui.instructions_label, 700);
+    lv_obj_align(ui.instructions_label, LV_ALIGN_TOP_MID, 0, 120);
+
+    lv_obj_set_style_text_font(ui.instructions_label, &lv_font_dejavu_20_german, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui.instructions_label, WWTBAM_BLUE_LIGHT, LV_PART_MAIN);
+    lv_obj_set_style_text_align(ui.instructions_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+
+    lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
+
+    // Instructions frame styling
+    lv_obj_set_style_bg_color(ui.instructions_label, WWTBAM_BLUE_DARK, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(ui.instructions_label, LV_OPA_80, LV_PART_MAIN);
+    lv_obj_set_style_border_color(ui.instructions_label, WWTBAM_WHITE, LV_PART_MAIN);
+    lv_obj_set_style_border_width(ui.instructions_label, 2, LV_PART_MAIN);
+    lv_obj_set_style_radius(ui.instructions_label, 16, LV_PART_MAIN);
+    lv_obj_set_style_pad_all(ui.instructions_label, 20, LV_PART_MAIN);
+
+
+    // Question box (framed, centered)
     ui.question_label = lv_label_create(ui.root);
-    lv_obj_set_width(ui.question_label, 700);
     lv_label_set_long_mode(ui.question_label, LV_LABEL_LONG_WRAP);
+    lv_obj_set_style_text_line_space(ui.question_label, 5, LV_PART_MAIN);
+    lv_obj_set_width(ui.question_label, 700);
+    lv_obj_align(ui.question_label, LV_ALIGN_TOP_MID, 0, 20);
+
     lv_obj_set_style_text_font(ui.question_label, &lv_font_dejavu_24_german, LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui.question_label, WWTBAM_WHITE, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui.question_label, WWTBAM_GOLD, LV_PART_MAIN);
     lv_obj_set_style_text_align(ui.question_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+
+    lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
 
     // Frame styling
     lv_obj_set_style_bg_color(ui.question_label, WWTBAM_BLUE_DARK, LV_PART_MAIN);
@@ -195,8 +229,6 @@ static void create_quiz_ui_once(void)
     lv_obj_set_style_border_width(ui.question_label, 2, LV_PART_MAIN);
     lv_obj_set_style_radius(ui.question_label, 16, LV_PART_MAIN);
     lv_obj_set_style_pad_all(ui.question_label, 20, LV_PART_MAIN);
-
-    lv_obj_align(ui.question_label, LV_ALIGN_TOP_MID, 0, 20);
 
     // Score label (top-left)
     ui.score_label = lv_label_create(ui.root);
@@ -210,38 +242,15 @@ static void create_quiz_ui_once(void)
     lv_obj_set_style_text_color(ui.countdown_label, WWTBAM_GOLD, LV_PART_MAIN);
     lv_obj_align(ui.countdown_label, LV_ALIGN_BOTTOM_LEFT, 10, -10);
 
-    // Reaction label (center)
-    ui.reaction_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_align(ui.reaction_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
-    lv_obj_set_style_text_font(ui.reaction_label, &lv_font_dejavu_18_german, LV_PART_MAIN);
-    lv_label_set_long_mode(ui.reaction_label, LV_LABEL_LONG_WRAP);
-    lv_obj_set_width(ui.reaction_label, 600);
-    lv_obj_align(ui.reaction_label, LV_ALIGN_BOTTOM_MID, 0, -10);
-    lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
-
-    // Central label for winner/fail/shutdown screens
-    ui.center_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_font(ui.center_label, &lv_font_dejavu_24_german, LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui.center_label, WWTBAM_WHITE, LV_PART_MAIN);
-    lv_obj_align(ui.center_label, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_add_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-
-    // Start screen instructions label
-    ui.start_instr_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_font(ui.start_instr_label, &lv_font_dejavu_16_german, LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui.start_instr_label, WWTBAM_WHITE, LV_PART_MAIN);
-    lv_obj_set_style_text_align(ui.start_instr_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
-    lv_label_set_long_mode(ui.start_instr_label, LV_LABEL_LONG_WRAP);
-    lv_obj_set_width(ui.start_instr_label, 700);
-    lv_obj_align(ui.start_instr_label, LV_ALIGN_CENTER, 0, 60);
-    lv_obj_add_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
-
-    // Additional label for fail instructions (only used in FAIL state)
-    ui.fail_instr_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_font(ui.fail_instr_label, &lv_font_dejavu_16_german, LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui.fail_instr_label, WWTBAM_WHITE, LV_PART_MAIN);
-    lv_obj_align(ui.fail_instr_label, LV_ALIGN_BOTTOM_MID, 0, -20);
-    lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
+    // System message label (bottom center - used for reactions and instructions)
+    ui.system_message_label = lv_label_create(ui.root);
+    lv_obj_set_style_text_align(ui.system_message_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui.system_message_label, &lv_font_dejavu_18_german, LV_PART_MAIN);
+    lv_label_set_long_mode(ui.system_message_label, LV_LABEL_LONG_WRAP);
+    lv_obj_set_style_text_line_space(ui.system_message_label, 3, LV_PART_MAIN);
+    lv_obj_set_width(ui.system_message_label, 600);
+    lv_obj_align(ui.system_message_label, LV_ALIGN_BOTTOM_MID, 0, -10);
+    lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
 
     // Create LVGL button widgets (3 buttons)
     const int frame_width = 700;
@@ -335,10 +344,9 @@ static void show_question_ui(int q_index)
     lv_obj_clear_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_clear_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_clear_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.title_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
 
     highlight_answer_frame(-1);  // reset highlights 
 
@@ -360,7 +368,7 @@ static void show_question_ui(int q_index)
 
 static void show_reaction_ui(bool correct, const char *custom_message)
 {
-    if (!ui.reaction_label) return;
+    if (!ui.system_message_label) return;
 
     const char *reaction;
     if (custom_message) {
@@ -371,12 +379,12 @@ static void show_reaction_ui(bool correct, const char *custom_message)
                    quiz_questions[current_question_index].wrong_reaction;
     }
 
-    lv_label_set_text(ui.reaction_label, reaction);
-    lv_obj_set_style_text_color(ui.reaction_label,
+    lv_label_set_text(ui.system_message_label, reaction);
+    lv_obj_set_style_text_color(ui.system_message_label,
                                 correct ? LV_COLOR_GREEN : LV_COLOR_RED,
                                 LV_PART_MAIN);
 
-    lv_obj_clear_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
 }
 
 static void show_winner_ui(void)
@@ -389,16 +397,15 @@ static void show_winner_ui(void)
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < NUM_BUTTONS; i++) {
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
-    lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
 
     // Show center label
-    lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.center_label, "Herzlichen Glückwunsch!\n\nDu hast gewonnen!\n\nDer Code zum Finale lautet: 7777");
+    lv_obj_clear_flag(ui.title_label, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui.title_label, "Herzlichen Glückwunsch!\n\nDu hast gewonnen!\n\nDer Code zum Finale lautet: 7777");
 }
 
 static void show_fail_ui(void)
@@ -411,18 +418,18 @@ static void show_fail_ui(void)
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < NUM_BUTTONS; i++) {
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
-    lv_obj_add_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
 
     // Show center + instruction
-    lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.center_label, "Leider hat es nicht geklappt\n\nMöchtest du es nochmal versuchen?");
+    lv_obj_clear_flag(ui.title_label, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui.title_label, "Leider hat es nicht geklappt\n\nMöchtest du es nochmal versuchen?");
 
-    lv_obj_clear_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.fail_instr_label, "Grün: Neuer Versuch\nRot (lange drücken): Spiel beenden");
+    lv_obj_clear_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui.system_message_label, "Grün: Neuer Versuch\nRot (lange drücken): Spiel beenden");
 }
 
 static void show_shutdown_prompt_ui(void)
@@ -435,16 +442,15 @@ static void show_shutdown_prompt_ui(void)
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < NUM_BUTTONS; i++) {
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
-    lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
 
     // Show center label
-    lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.center_label, "Press any button to shutdown");
+    lv_obj_clear_flag(ui.title_label, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui.title_label, "Press any button to shutdown");
 }
 
 static void show_start_screen_ui(void)
@@ -457,22 +463,30 @@ static void show_start_screen_ui(void)
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < NUM_BUTTONS; i++) {
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
-    lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
 
     // Show center label with welcome message
-    lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.center_label, "Herzlich Willkommen im Quiz-Hotel");
+    lv_obj_clear_flag(ui.title_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_style_text_color(ui.system_message_label, WWTBAM_GOLD, LV_PART_MAIN);
+    lv_label_set_text(ui.title_label, "Herzlich Willkommen im Quiz-Hotel!");
 
     // Show instructions label
-    lv_obj_clear_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.start_instr_label,
-        "Für eine richtige Antwort bekommst du einen Punkt, für eine falsche wird ein Punkt abgezogen. "
-        "Danach geht es automatisch mit der nächsten Frage weiter. Bei 10 Punkten erhälst du eine Belohnung. "
-        "Drücke einen der Knöpfe, wenn du bereit bist.");
+    lv_obj_clear_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui.instructions_label,
+        "Für eine richtige Antwort bekommst du einen Punkt.\n"
+        "Für eine falsche Antwort wird ein Punkt abgezogen.\n"
+        "Danach geht es automatisch mit der nächsten Frage weiter.\n"
+        "Bei 10 Punkten erhälst du eine Belohnung.\n"
+        "Nach 50 Versuchen ist das Spiel vorbei."
+    );
+
+    // Show system message to start
+    lv_obj_clear_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_style_text_color(ui.system_message_label, WWTBAM_GOLD, LV_PART_MAIN);
+    lv_label_set_text(ui.system_message_label, "Drücke eine beliebige Taste, um zu starten");
 }
 
 // === Quiz timer callback (only uses LVGL safely, no deletes) ================
