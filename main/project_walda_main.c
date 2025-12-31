@@ -55,6 +55,7 @@
 
 typedef enum {
     QUIZ_STATE_IDLE,
+    QUIZ_STATE_START_SCREEN,
     QUIZ_STATE_SHOWING_QUESTION,
     QUIZ_STATE_WAITING_ANSWER,
     QUIZ_STATE_SHOWING_REACTION,
@@ -92,6 +93,8 @@ static button_info_t buttons[NUM_BUTTONS];
 typedef struct {
     lv_obj_t *root;                  // main container
 
+    lv_obj_t *center_label;          // used for winner/fail/shutdown screens
+    lv_obj_t *start_instr_label;     // used for start screen instructions
     lv_obj_t *question_label;
     lv_obj_t *answer_labels[3];
     lv_obj_t *countdown_label;
@@ -102,7 +105,6 @@ typedef struct {
     lv_obj_t *answer_frames[3];
     lv_obj_t *buttons[3];            // LVGL button widgets
 
-    lv_obj_t *center_label;          // used for winner/fail/shutdown screens
 } quiz_ui_t;
 
 static quiz_ui_t ui = {0};
@@ -220,14 +222,24 @@ static void create_quiz_ui_once(void)
     // Central label for winner/fail/shutdown screens
     ui.center_label = lv_label_create(ui.root);
     lv_obj_set_style_text_font(ui.center_label, &lv_font_dejavu_24_german, LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui.center_label, LV_COLOR_WHITE, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui.center_label, WWTBAM_WHITE, LV_PART_MAIN);
     lv_obj_align(ui.center_label, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
+
+    // Start screen instructions label
+    ui.start_instr_label = lv_label_create(ui.root);
+    lv_obj_set_style_text_font(ui.start_instr_label, &lv_font_dejavu_16_german, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui.start_instr_label, WWTBAM_WHITE, LV_PART_MAIN);
+    lv_obj_set_style_text_align(ui.start_instr_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_label_set_long_mode(ui.start_instr_label, LV_LABEL_LONG_WRAP);
+    lv_obj_set_width(ui.start_instr_label, 700);
+    lv_obj_align(ui.start_instr_label, LV_ALIGN_CENTER, 0, 60);
+    lv_obj_add_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
 
     // Additional label for fail instructions (only used in FAIL state)
     ui.fail_instr_label = lv_label_create(ui.root);
     lv_obj_set_style_text_font(ui.fail_instr_label, &lv_font_dejavu_16_german, LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui.fail_instr_label, LV_COLOR_WHITE, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui.fail_instr_label, WWTBAM_WHITE, LV_PART_MAIN);
     lv_obj_align(ui.fail_instr_label, LV_ALIGN_BOTTOM_MID, 0, -20);
     lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
 
@@ -326,6 +338,7 @@ static void show_question_ui(int q_index)
     lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
 
     highlight_answer_frame(-1);  // reset highlights 
 
@@ -376,6 +389,7 @@ static void show_winner_ui(void)
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
     lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
 
     // Show center label
     lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
@@ -396,6 +410,7 @@ static void show_fail_ui(void)
     for (int i = 0; i < NUM_BUTTONS; i++) {
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
+    lv_obj_add_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
 
     // Show center + instruction
     lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
@@ -420,10 +435,39 @@ static void show_shutdown_prompt_ui(void)
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
     }
     lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
 
     // Show center label
     lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
     lv_label_set_text(ui.center_label, "Press any button to shutdown");
+}
+
+static void show_start_screen_ui(void)
+{
+    create_quiz_ui_once();
+
+    lv_obj_set_style_bg_color(ui.root, WWTBAM_BG, LV_PART_MAIN);
+
+    // Hide quiz elements
+    lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui.reaction_label, LV_OBJ_FLAG_HIDDEN);
+    for (int i = 0; i < NUM_BUTTONS; i++) {
+        lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
+    }
+    lv_obj_add_flag(ui.fail_instr_label, LV_OBJ_FLAG_HIDDEN);
+
+    // Show center label with welcome message
+    lv_obj_clear_flag(ui.center_label, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui.center_label, "Herzlich Willkommen im Quiz-Hotel");
+
+    // Show instructions label
+    lv_obj_clear_flag(ui.start_instr_label, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui.start_instr_label,
+        "Für eine richtige Antwort bekommst du einen Punkt, für eine falsche wird ein Punkt abgezogen. "
+        "Danach geht es automatisch mit der nächsten Frage weiter. Bei 10 Punkten erhälst du eine Belohnung. "
+        "Drücke einen der Knöpfe, wenn du bereit bist.");
 }
 
 // === Quiz timer callback (only uses LVGL safely, no deletes) ================
@@ -436,17 +480,22 @@ static void quiz_timer_callback(lv_timer_t *timer)
 
     second_counter++;
 
+    ESP_LOGV("QUIZ", "Timer callback: state=%d, second_counter=%d", quiz_state, second_counter);
+
     switch (quiz_state) {
     case QUIZ_STATE_SHOWING_QUESTION: {
+        ESP_LOGI("QUIZ", "Timer: SHOWING_QUESTION - selecting question");
         current_question_index = select_random_question();
         if (current_question_index == -1) {
             // All questions used
             if (score >= 10) {
+                ESP_LOGI("QUIZ", "Timer: All questions used, score >= 10 - WINNER");
                 quiz_state = QUIZ_STATE_WINNER;
                 winner_counter = 0;
                 show_winner_ui();
                 lv_timer_set_period(quiz_timer, 100);  // 100 ms for winner timer
             } else {
+                ESP_LOGI("QUIZ", "Timer: All questions used, score < 10 - FAIL");
                 quiz_state = QUIZ_STATE_FAIL;
                 fail_counter = 0;
                 show_fail_ui();
@@ -457,6 +506,7 @@ static void quiz_timer_callback(lv_timer_t *timer)
         }
 
         // Show a new question
+        ESP_LOGI("QUIZ", "Timer: Showing question %d, setting state to WAITING_ANSWER", current_question_index);
         show_question_ui(current_question_index);
         quiz_state = QUIZ_STATE_WAITING_ANSWER;
         lv_timer_set_period(quiz_timer, 1000); // 1 second for countdown
@@ -472,6 +522,7 @@ static void quiz_timer_callback(lv_timer_t *timer)
 
             if (timer_remaining <= 0) {
                 // Time's up
+                ESP_LOGI("QUIZ", "Timer: Time's up in WAITING_ANSWER - setting state to SHOWING_REACTION");
                 quiz_state = QUIZ_STATE_SHOWING_REACTION;
                 bool correct = false;
                 if (score > 0) score--;
@@ -487,16 +538,19 @@ static void quiz_timer_callback(lv_timer_t *timer)
     case QUIZ_STATE_SHOWING_REACTION:
         if (second_counter >= 2) {
             if (score >= 10) {
+                ESP_LOGI("QUIZ", "Timer: Reaction shown, score >= 10 - WINNER");
                 quiz_state = QUIZ_STATE_WINNER;
                 winner_counter = 0;
                 show_winner_ui();
                 lv_timer_set_period(quiz_timer, 100);
-            } else if (tries >= 25) {
+            } else if (tries >= 50) {
+                ESP_LOGI("QUIZ", "Timer: Reaction shown, tries >= 50 - FAIL");
                 quiz_state = QUIZ_STATE_FAIL;
                 fail_counter = 0;
                 show_fail_ui();
                 lv_timer_set_period(quiz_timer, 100);
             } else {
+                ESP_LOGI("QUIZ", "Timer: Reaction shown, continuing to next question");
                 quiz_state = QUIZ_STATE_SHOWING_QUESTION;
                 lv_timer_set_period(quiz_timer, 100);
             }
@@ -507,6 +561,7 @@ static void quiz_timer_callback(lv_timer_t *timer)
     case QUIZ_STATE_WINNER:
         winner_counter++;
         if (winner_counter >= 150) {  // 15 seconds
+            ESP_LOGI("QUIZ", "Timer: Winner timeout - SHUTDOWN_PROMPT");
             quiz_state = QUIZ_STATE_SHUTDOWN_PROMPT;
             show_shutdown_prompt_ui();
             winner_counter = 0;
@@ -523,6 +578,7 @@ static void quiz_timer_callback(lv_timer_t *timer)
         break;
 
     case QUIZ_STATE_SHUTDOWN_PROMPT:
+    case QUIZ_STATE_START_SCREEN:
     case QUIZ_STATE_IDLE:
     default:
         // nothing
@@ -536,14 +592,19 @@ static void handle_answer_async(void *user_data)
 {
     int btn_index = (int)user_data;
 
+    ESP_LOGI("QUIZ", "handle_answer_async: Processing answer for button %d", btn_index);
+
     if (quiz_state != QUIZ_STATE_WAITING_ANSWER) {
+        ESP_LOGW("QUIZ", "handle_answer_async: State is not WAITING_ANSWER (current: %d), ignoring", quiz_state);
         return;
     }
 
     user_answer = 'A' + btn_index;
+    ESP_LOGI("QUIZ", "handle_answer_async: User selected answer %c", user_answer);
     highlight_answer_frame(btn_index);
 
     bool correct = (user_answer == quiz_questions[current_question_index].correct);
+    ESP_LOGI("QUIZ", "handle_answer_async: Answer is %s (correct: %c)", correct ? "CORRECT" : "WRONG", quiz_questions[current_question_index].correct);
     if (correct) {
         score++;
     } else {
@@ -552,6 +613,7 @@ static void handle_answer_async(void *user_data)
     tries++;
     update_score_display();
 
+    ESP_LOGI("QUIZ", "handle_answer_async: Setting state to SHOWING_REACTION");
     quiz_state = QUIZ_STATE_SHOWING_REACTION;
     show_reaction_ui(correct);
     lv_timer_set_period(quiz_timer, 3000); // 3 seconds reaction
@@ -559,12 +621,26 @@ static void handle_answer_async(void *user_data)
 
 // === Shutdown or restart from LVGL context ==================================
 
+static void handle_start_quiz_async(void *user_data)
+{
+    (void)user_data;
+
+    ESP_LOGI("QUIZ", "handle_start_quiz_async: Starting quiz initialization");
+    init_quiz_logic();
+    ESP_LOGI("QUIZ", "handle_start_quiz_async: Setting state to SHOWING_QUESTION");
+    quiz_state = QUIZ_STATE_SHOWING_QUESTION;
+    lv_timer_reset(quiz_timer);
+    lv_timer_set_period(quiz_timer, 100);
+    ESP_LOGI("QUIZ", "handle_start_quiz_async: Timer reset and period set");
+}
+
 static void handle_restart_async(void *user_data)
 {
     (void)user_data;
 
     init_quiz_logic();
     quiz_state = QUIZ_STATE_SHOWING_QUESTION;
+    lv_timer_reset(quiz_timer);
     lv_timer_set_period(quiz_timer, 100);
 }
 
@@ -594,6 +670,9 @@ static void button_event_cb(void *arg, void *data)
         return;
     }
 
+    ESP_LOGI("BUTTON", "Button %d event: %s (current quiz_state: %d)",
+             btn_index, iot_button_get_event_str(event), quiz_state);
+
     const char *color_names[] = {"BLUE", "GREEN", "RED"};
     ESP_LOGI("BUTTON", "%s button event: %s",
              color_names[btn_index], iot_button_get_event_str(event));
@@ -613,23 +692,35 @@ static void button_event_cb(void *arg, void *data)
     // Visual button state
     if (BUTTON_PRESS_DOWN == event) {
         buttons[btn_index].is_pressed = true;
-    } else if (BUTTON_PRESS_UP == event || BUTTON_PRESS_END == event) {
+    } else if (BUTTON_PRESS_UP == event) {
         buttons[btn_index].is_pressed = false;
 
-        // Quiz logic (through async handlers)
+        // Quiz logic (through async handlers) - only on BUTTON_PRESS_UP
         if (quiz_state == QUIZ_STATE_WAITING_ANSWER) {
+            ESP_LOGI("QUIZ", "Button %d pressed in WAITING_ANSWER state - scheduling answer", btn_index);
             lv_async_call(handle_answer_async, (void *)btn_index);
+        } else if (quiz_state == QUIZ_STATE_START_SCREEN) {
+            // Any button starts the quiz
+            ESP_LOGI("QUIZ", "Button %d pressed in START_SCREEN state - scheduling quiz start", btn_index);
+            lv_async_call(handle_start_quiz_async, NULL);
         } else if (quiz_state == QUIZ_STATE_SHUTDOWN_PROMPT) {
             // Any button shuts down
+            ESP_LOGI("QUIZ", "Button %d pressed in SHUTDOWN_PROMPT state - scheduling shutdown", btn_index);
             lv_async_call(handle_shutdown_async, NULL);
         } else if (quiz_state == QUIZ_STATE_FAIL) {
             uint32_t pressed_ms = iot_button_get_pressed_time(btn_handle);
             if (btn_index == 1) { // Green button - restart
+                ESP_LOGI("QUIZ", "Green button pressed in FAIL state - scheduling restart");
                 lv_async_call(handle_restart_async, NULL);
             } else if (btn_index == 2 && pressed_ms > 2000) { // Long red press - shutdown
+                ESP_LOGI("QUIZ", "Red button long press in FAIL state - scheduling shutdown");
                 lv_async_call(handle_shutdown_async, NULL);
             }
         }
+    } else if (BUTTON_PRESS_END == event) {
+        // BUTTON_PRESS_END is handled separately for visual state only
+        ESP_LOGV("BUTTON", "Button %d PRESS_END event - visual state only", btn_index);
+        buttons[btn_index].is_pressed = false;
     }
 }
 
@@ -638,7 +729,8 @@ static void button_event_cb(void *arg, void *data)
 static void start_quiz(void)
 {
     init_quiz_logic();
-    quiz_state = QUIZ_STATE_SHOWING_QUESTION;
+    quiz_state = QUIZ_STATE_START_SCREEN;
+    show_start_screen_ui();
     if (!quiz_timer) {
         quiz_timer = lv_timer_create(quiz_timer_callback, 100, NULL);
     } else {
