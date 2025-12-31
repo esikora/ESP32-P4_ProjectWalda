@@ -17,6 +17,7 @@
 #include "esp_system.h"
 #include "esp_log.h"
 #include "esp_random.h"
+#include "driver/gpio.h"
 
 #include "bsp/esp32_p4_wifi6_touch_lcd_7b.h"
 #include "lvgl.h"
@@ -75,6 +76,7 @@ static int current_question_index = -1;
 static int timer_remaining = 0;
 static char user_answer = 0;
 static lv_timer_t *quiz_timer = NULL;
+static bool system_shutdown = false;
 
 // === Button information ======================================================
 
@@ -672,14 +674,53 @@ static void handle_restart_async(void *user_data)
 static void handle_shutdown_async(void *user_data)
 {
     (void)user_data;
-    esp_restart();
-    // esp_deep_sleep_start();
+    
+    ESP_LOGI("QUIZ", "Initiating low-power shutdown...");
+    
+    // Turn off LCD backlight
+    bsp_display_backlight_off();
+    
+    // Stop and delete the quiz timer to save power
+    if (quiz_timer) {
+        lv_timer_del(quiz_timer);
+        quiz_timer = NULL;
+    }
+    
+    // Delete button handles to free resources and reduce power
+    for (int i = 0; i < NUM_BUTTONS; i++) {
+        if (buttons[i].handle) {
+            iot_button_delete(buttons[i].handle);
+            buttons[i].handle = NULL;
+        }
+    }
+    
+    // Configure button GPIOs for low power (input with pull-down)
+    for (int i = 0; i < NUM_BUTTONS; i++) {
+        gpio_config_t io_conf = {
+            .pin_bit_mask = (1ULL << buttons[i].gpio_num),
+            .mode = GPIO_MODE_INPUT,
+            .pull_up_en = GPIO_PULLUP_DISABLE,
+            .pull_down_en = GPIO_PULLDOWN_ENABLE,
+            .intr_type = GPIO_INTR_DISABLE
+        };
+        gpio_config(&io_conf);
+    }
+    
+    // Set shutdown flag to stop processing and button reactions
+    system_shutdown = true;
+    
+    ESP_LOGI("QUIZ", "System shutdown complete - entering low power mode");
 }
 
 // === Button event callback (no direct LVGL calls, only lv_async_call) ========
 
 static void button_event_cb(void *arg, void *data)
 {
+    // Ignore all button events when system is shutdown
+    if (system_shutdown) {
+        return;
+    }
+    
     button_handle_t btn_handle = (button_handle_t)arg;
     button_event_t event = iot_button_get_event(btn_handle);
 
@@ -838,8 +879,10 @@ void app_main(void)
     ESP_LOGI("QUIZ", "Quiz system initialized. Starting quiz...");
     start_quiz();
 
-    while (true) {
+    while (!system_shutdown) {
         lv_timer_handler();                 // LVGL processing
         vTaskDelay(pdMS_TO_TICKS(5));       // 5 ms tick
     }
+    
+    ESP_LOGI("QUIZ", "System shutdown complete - main loop exited");
 }
