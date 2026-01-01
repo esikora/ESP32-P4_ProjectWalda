@@ -54,7 +54,9 @@
 #define WWTBAM_HIGHLIGHT_BG     lv_color_make(0x44, 0x44, 0xAA)   // glowing blue
 #define WWTBAM_HIGHLIGHT_BORDER lv_color_make(0x33, 0x99, 0xFF)   // electric blue
 
-#define WINNING_SCORE 10
+#define UI_BOTTOM_LABELS_OFFSET_Y -10
+
+#define WINNING_SCORE 12
 
 
 typedef enum {
@@ -109,6 +111,8 @@ typedef struct {
     lv_obj_t *answer_frames[3];
     lv_obj_t *buttons[3];            // LVGL button widgets
 
+    lv_obj_t *score_leds[WINNING_SCORE];  // LED bar segments for score visualization
+
 } quiz_ui_t;
 
 static quiz_ui_t ui = {0};
@@ -136,8 +140,7 @@ static void init_quiz_logic(void)
     timer_remaining = 0;
     user_answer = 0;
 
-    // random seed
-    srand((unsigned)esp_random());
+    // No need for srand with esp_random()
 }
 
 static int select_random_question(void)
@@ -149,7 +152,7 @@ static int select_random_question(void)
 
     if (available == 0) return -1;
 
-    int target = rand() % available;
+    int target = esp_random() % available;
     int count = 0;
     for (int i = 0; i < NUM_QUIZ_QUESTIONS; i++) {
         if (!used_questions[i]) {
@@ -183,6 +186,13 @@ static void create_quiz_ui_once(void)
     lv_obj_set_size(ui.root, LV_PCT(100), LV_PCT(100));
     lv_obj_set_style_bg_color(ui.root, LV_COLOR_WHITE, LV_PART_MAIN);
     lv_obj_clear_flag(ui.root, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_update_layout(ui.root);
+
+    // Determine screen width for layout calculations
+    lv_coord_t screen_width = lv_obj_get_width(ui.root);
+    lv_coord_t content_width = lv_obj_get_content_width(ui.root);
+    ESP_LOGI("QUIZ", "UI root object width=%d, content width=%d", screen_width, content_width);
 
     // Central label for start/winner/fail/shutdown screens
     ui.title_label = lv_label_create(ui.root);
@@ -238,14 +248,35 @@ static void create_quiz_ui_once(void)
     ui.score_label = lv_label_create(ui.root);
     lv_obj_set_style_text_font(ui.score_label, &lv_font_dejavu_18_german, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui.score_label, WWTBAM_GOLD, LV_PART_MAIN);
-    lv_obj_align(ui.score_label, LV_ALIGN_BOTTOM_LEFT, 10, -10);
+    lv_obj_align(ui.score_label, LV_ALIGN_BOTTOM_LEFT, 0, UI_BOTTOM_LABELS_OFFSET_Y);
+
+    // Score LED bar (bottom center)
+    int led_spacing = 4;
+    int led_extent = (content_width + led_spacing) / WINNING_SCORE;
+    int led_width = led_extent - led_spacing;  // 2px spacing between LEDs
+    int led_height = 10;
+    int y_offset = 7;
+
+    for (int i = 0; i < WINNING_SCORE; i++) {
+        ui.score_leds[i] = lv_obj_create(ui.root);
+        lv_obj_set_size(ui.score_leds[i], led_width, led_height);
+        int x_offset = i * led_extent;
+        lv_obj_align(ui.score_leds[i], LV_ALIGN_BOTTOM_LEFT, x_offset, y_offset);
+        ESP_LOGI("QUIZ", "Created LED %d at x=%d, y=%d, width=%d, height=%d", i, x_offset, y_offset, led_width, led_height);
+
+        // Default: dark/off state
+        lv_obj_set_style_bg_color(ui.score_leds[i], WWTBAM_BLUE_DARK, LV_PART_MAIN);
+        lv_obj_set_style_border_color(ui.score_leds[i], WWTBAM_BLUE, LV_PART_MAIN);
+        lv_obj_set_style_border_width(ui.score_leds[i], 1, LV_PART_MAIN);
+        lv_obj_set_style_radius(ui.score_leds[i], 2, LV_PART_MAIN);
+    }
 
     // Countdown label (bottom right)
     ui.countdown_label = lv_label_create(ui.root);
     lv_obj_set_style_text_font(ui.countdown_label, &lv_font_dejavu_18_german, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui.countdown_label, WWTBAM_GOLD, LV_PART_MAIN);
     lv_obj_set_style_text_align(ui.countdown_label, LV_TEXT_ALIGN_RIGHT, LV_PART_MAIN);
-    lv_obj_align(ui.countdown_label, LV_ALIGN_BOTTOM_RIGHT, -10, -10);
+    lv_obj_align(ui.countdown_label, LV_ALIGN_BOTTOM_RIGHT, 0, UI_BOTTOM_LABELS_OFFSET_Y);
 
     // System message label (bottom center - used for reactions and instructions)
     ui.system_message_label = lv_label_create(ui.root);
@@ -254,7 +285,7 @@ static void create_quiz_ui_once(void)
     lv_label_set_long_mode(ui.system_message_label, LV_LABEL_LONG_WRAP);
     lv_obj_set_style_text_line_space(ui.system_message_label, 3, LV_PART_MAIN);
     lv_obj_set_width(ui.system_message_label, 600);
-    lv_obj_align(ui.system_message_label, LV_ALIGN_BOTTOM_MID, 0, -10);
+    lv_obj_align(ui.system_message_label, LV_ALIGN_BOTTOM_MID, 0, UI_BOTTOM_LABELS_OFFSET_Y);
     lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
 
     // Create LVGL button widgets (3 buttons)
@@ -330,6 +361,21 @@ static void update_score_display(void)
     char buf[32];
     snprintf(buf, sizeof(buf), "Punkte: %d", score);
     lv_label_set_text(ui.score_label, buf);
+
+    // Update LED bar
+    for (int i = 0; i < WINNING_SCORE; i++) {
+        if (ui.score_leds[i]) {
+            if (i < score) {
+                // Lit: gold color
+                lv_obj_set_style_bg_color(ui.score_leds[i], LV_COLOR_GREEN, LV_PART_MAIN);
+            } else {
+                // Unlit: dark
+                lv_obj_set_style_bg_color(ui.score_leds[i], WWTBAM_BLUE_DARK, LV_PART_MAIN);
+            }
+        } else {
+            ESP_LOGW("LED", "LED %d is NULL!", i);
+        }
+    }
 }
 
 static void update_countdown_display(void)
@@ -361,6 +407,10 @@ static void show_question_ui(int q_index)
     lv_obj_clear_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_clear_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_clear_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
+    ESP_LOGI("LED", "Showing score LEDs");
+    for (int i = 0; i < WINNING_SCORE; i++) {
+        lv_obj_clear_flag(ui.score_leds[i], LV_OBJ_FLAG_HIDDEN);
+    }
     lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.title_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
@@ -414,6 +464,10 @@ static void show_winner_ui(void)
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
+    ESP_LOGI("LED", "Hiding score LEDs (winner)");
+    for (int i = 0; i < WINNING_SCORE; i++) {
+        lv_obj_add_flag(ui.score_leds[i], LV_OBJ_FLAG_HIDDEN);
+    }
     lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < NUM_BUTTONS; i++) {
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
@@ -442,6 +496,10 @@ static void show_fail_ui(void)
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
+    ESP_LOGI("LED", "Hiding score LEDs (fail)");
+    for (int i = 0; i < WINNING_SCORE; i++) {
+        lv_obj_add_flag(ui.score_leds[i], LV_OBJ_FLAG_HIDDEN);
+    }
     lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < NUM_BUTTONS; i++) {
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
@@ -484,6 +542,10 @@ static void show_start_screen_ui(void)
     lv_obj_add_flag(ui.question_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.score_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui.countdown_label, LV_OBJ_FLAG_HIDDEN);
+    ESP_LOGI("LED", "Hiding score LEDs (start screen)");
+    for (int i = 0; i < WINNING_SCORE; i++) {
+        lv_obj_add_flag(ui.score_leds[i], LV_OBJ_FLAG_HIDDEN);
+    }
     lv_obj_add_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < NUM_BUTTONS; i++) {
         lv_obj_add_flag(ui.answer_frames[i], LV_OBJ_FLAG_HIDDEN);
