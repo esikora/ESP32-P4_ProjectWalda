@@ -643,7 +643,7 @@ static void quiz_timer_callback(lv_timer_t *timer)
         break;
 
     case QUIZ_STATE_SHOWING_REACTION:
-        if (second_counter >= 2) {
+        if (second_counter >= 3) {
             if (score >= WINNING_SCORE) {
                 ESP_LOGI("QUIZ", "Timer: Reaction shown, score >= WINNING_SCORE -> WINNER");
                 quiz_state = QUIZ_STATE_WINNER;
