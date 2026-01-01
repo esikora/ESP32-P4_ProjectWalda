@@ -54,6 +54,8 @@
 #define WWTBAM_HIGHLIGHT_BG     lv_color_make(0x44, 0x44, 0xAA)   // glowing blue
 #define WWTBAM_HIGHLIGHT_BORDER lv_color_make(0x33, 0x99, 0xFF)   // electric blue
 
+#define WINNING_SCORE 10
+
 
 typedef enum {
     QUIZ_STATE_IDLE,
@@ -494,15 +496,18 @@ static void show_start_screen_ui(void)
 
     // Show instructions label
     lv_obj_clear_flag(ui.instructions_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui.instructions_label,
+    char instructions_buf[512];
+    snprintf(instructions_buf, sizeof(instructions_buf),
         "Spielregeln:\n"
         "1. Antworte innerhalb der vorgegebenen Zeit!\n"
         "2. Für eine richtige Antwort bekommst du einen Punkt.\n"
         "3. Für eine falsche Antwort wird ein Punkt abgezogen.\n"
         "4. Die nächste Frage erscheint automatisch.\n"
-        "5. Bei 10 Punkten erhälst du eine Belohnung.\n"
-        "6. Nach höchstens 50 Versuchen ist das Spiel vorbei."
+        "5. Bei %d Punkten erhälst du eine Belohnung.\n"
+        "6. Nach höchstens 50 Versuchen ist das Spiel vorbei.",
+        WINNING_SCORE
     );
+    lv_label_set_text(ui.instructions_label, instructions_buf);
 
     // Show system message to start
     lv_obj_clear_flag(ui.system_message_label, LV_OBJ_FLAG_HIDDEN);
@@ -528,14 +533,14 @@ static void quiz_timer_callback(lv_timer_t *timer)
         current_question_index = select_random_question();
         if (current_question_index == -1) {
             // All questions used
-            if (score >= 10) {
-                ESP_LOGI("QUIZ", "Timer: All questions used, score >= 10 - WINNER");
+            if (score >= WINNING_SCORE) {
+                ESP_LOGI("QUIZ", "Timer: All questions used, score >= WINNING_SCORE -> WINNER");
                 quiz_state = QUIZ_STATE_WINNER;
                 winner_counter = 0;
                 show_winner_ui();
                 lv_timer_set_period(quiz_timer, 100);  // 100 ms for winner timer
             } else {
-                ESP_LOGI("QUIZ", "Timer: All questions used, score < 10 - FAIL");
+                ESP_LOGI("QUIZ", "Timer: All questions used, score < WINNING_SCORE -> FAIL");
                 quiz_state = QUIZ_STATE_FAIL;
                 fail_counter = 0;
                 show_fail_ui();
@@ -577,8 +582,8 @@ static void quiz_timer_callback(lv_timer_t *timer)
 
     case QUIZ_STATE_SHOWING_REACTION:
         if (second_counter >= 2) {
-            if (score >= 10) {
-                ESP_LOGI("QUIZ", "Timer: Reaction shown, score >= 10 - WINNER");
+            if (score >= WINNING_SCORE) {
+                ESP_LOGI("QUIZ", "Timer: Reaction shown, score >= WINNING_SCORE -> WINNER");
                 quiz_state = QUIZ_STATE_WINNER;
                 winner_counter = 0;
                 show_winner_ui();
