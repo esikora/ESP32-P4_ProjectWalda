@@ -723,7 +723,7 @@ static void handle_answer_async(void *user_data)
     ESP_LOGI("QUIZ", "handle_answer_async: Setting state to SHOWING_REACTION");
     quiz_state = QUIZ_STATE_SHOWING_REACTION;
     show_reaction_ui(correct, NULL);
-    lv_timer_set_period(quiz_timer, 3000); // 3 seconds reaction
+    lv_timer_set_period(quiz_timer, 1000); // 1 second intervals for 2-second reaction
 }
 
 // === Shutdown or restart from LVGL context ==================================
