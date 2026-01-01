@@ -1,3 +1,4 @@
+import json
 import re
 from collections import Counter, defaultdict
 from copy import deepcopy
@@ -104,6 +105,24 @@ def count_correct_per_category(questions):
     return per_cat
 
 # ------------------------------------------------------------
+# Antwort-Anzahl prüfen, ob Gleichverteilung verletzt ist
+# ------------------------------------------------------------
+def is_category_balanced(counts, target):
+    # Werte extrahieren
+    a, b, c = counts["A"], counts["B"], counts["C"]
+
+    # 1. Kein Wert darf mehr als target + 1 sein
+    if max(a, b, c) > target + 1:
+        return False
+
+    # 2. Es dürfen höchstens zwei Werte target + 1 sein
+    if min(a, b, c) < target:
+        return False
+
+    # Wenn wir hier sind, ist die Kategorie akzeptabel verteilt
+    return True
+
+# ------------------------------------------------------------
 # Antworten permutieren, um Gleichverteilung je Kategorie zu erreichen
 # ------------------------------------------------------------
 def balance_per_category(questions):
@@ -122,8 +141,12 @@ def balance_per_category(questions):
         counts = Counter(q["correct"] for q in qlist)
 
         print(f"\nKategorie {cat}:")
-        print("  Vorher:", counts)
+        print("  vorher:", counts, ", gesamt: ", total)
         print("  Ziel je Buchstabe:", target)
+
+        if is_category_balanced(counts, target):
+            print("  bereits ausbalanciert")
+            continue
 
         groups = {
             "A": [q for q in qlist if q["correct"] == "A"],
@@ -150,7 +173,7 @@ def balance_per_category(questions):
 
                 q["correct"] = new_letter
 
-        print("  Nachher:", counts)
+        print("  nachher:", counts)
 
     return balanced
 
@@ -189,27 +212,103 @@ def write_output(original_content, questions, filename):
 
     print(f"\nNeue Datei geschrieben: {filename}")
 
+
+# ------------------------------------------------------------
+# JSON Import und Export
+# ------------------------------------------------------------
+
+def export_json(questions, filename):
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(questions, f, indent=4, ensure_ascii=False)
+    print(f"JSON exportiert nach: {filename}")
+
+
+def import_json(filename):
+    with open(filename, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    print(f"JSON importiert aus: {filename}")
+    return data
+
+
+# ------------------------------------------------------------
+# Excel Import und Export
+# ------------------------------------------------------------
+
+def export_excel(questions, filename):
+    try:
+        import pandas as pd
+    except ImportError:
+        print("Pandas ist nicht installiert. Excel-Export nicht möglich.")
+        return
+
+    df = pd.DataFrame(questions)
+    df.to_excel(filename, index=False)
+    print(f"Excel exportiert nach: {filename}")
+
+
+def import_excel(filename):
+    try:
+        import pandas as pd
+    except ImportError:
+        print("Pandas ist nicht installiert. Excel-Import nicht möglich.")
+        return []
+
+    df = pd.read_excel(filename)
+    print(f"Excel importiert aus: {filename}")
+    return df.to_dict(orient="records")
+
+
 # ------------------------------------------------------------
 # Hauptprogramm
 # ------------------------------------------------------------
 if __name__ == "__main__":
-    questions, original = parse_quiz_data(HEADER_FILE)
+    original = None
+    questions = None
 
-    print("\nVerteilung je Kategorie (vorher):")
-    per_cat = count_correct_per_category(questions)
-    for cat, cnt in per_cat.items():
-        print(f"  {cat}: {cnt}")
+    while True:
+        print("\nOptionen:")
+        print("1 = Header einlesen")
+        print("2 = Header schreiben")
+        print("3 = Antworten ausbalancieren")
+        print("4 = Export JSON")
+        print("5 = Export Excel")
+        print("6 = Import JSON")
+        print("7 = Import Excel")
+        print("8 = Beenden")
 
-    choice = input("\nInnerhalb jeder Kategorie ausbalancieren? (j/n): ").strip().lower()
+        choice = input("Auswahl: ").strip()
 
-    if choice == "j":
-        balanced = balance_per_category(questions)
+        if choice == "1":
+            questions, original = parse_quiz_data(HEADER_FILE)
+            print(f"{len(questions)} Fragen eingelesen.")
+            per_cat = count_correct_per_category(questions)
+            print("\nVerteilung je Kategorie:")
+            for cat, cnt in per_cat.items():
+                print(f"{cat}: {cnt}")
 
-        print("\nVerteilung je Kategorie (nachher):")
-        per_cat = count_correct_per_category(balanced)
-        for cat, cnt in per_cat.items():
-            print(f"  {cat}: {cnt}")
+        elif choice == "2":
+            if questions is not None:
+                write_output(original, questions, OUTPUT_FILE)
 
-        write_output(original, balanced, OUTPUT_FILE)
-    else:
-        print("Keine Änderungen vorgenommen.")
+        elif choice == "3":
+            questions = balance_per_category(questions)
+            print("\nVerteilung je Kategorie:")
+            per_cat = count_correct_per_category(questions)
+            for cat, cnt in per_cat.items():
+                print(f"  {cat}: {cnt}")
+
+        elif choice == "4":
+            export_json(questions, "quiz_export.json")
+
+        elif choice == "5":
+            export_excel(questions, "quiz_export.xlsx")
+
+        elif choice == "6":
+            questions = import_json("quiz_export.json")
+
+        elif choice == "7":
+            questions = import_excel("quiz_export.xlsx")
+
+        elif choice == "8":
+            print("Beendet.")
+            exit()
