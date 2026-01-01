@@ -6,7 +6,7 @@ from copy import deepcopy
 FOLDER = "main/"
 
 HEADER_FILE = FOLDER + "quiz_data.h"
-OUTPUT_FILE = FOLDER + "quiz_data_balanced.h"
+BACKUP_FILE = FOLDER + "quiz_data_backup.h"
 
 # ------------------------------------------------------------
 # Hilfsfunktion: C-String extrahieren
@@ -264,6 +264,7 @@ def import_excel(filename):
 if __name__ == "__main__":
     original = None
     questions = None
+    backup_written = False
 
     while True:
         print("\nOptionen:")
@@ -287,10 +288,23 @@ if __name__ == "__main__":
                 print(f"{cat}: {cnt}")
 
         elif choice == "2":
-            if questions is not None:
-                write_output(original, questions, OUTPUT_FILE)
+            if original is None:
+                print("Bitte zuerst den Header einlesen (Option 1).")
+                continue
+
+            if not backup_written:
+                with open(BACKUP_FILE, "w") as f:
+                    f.write(original)
+                print(f"Sicherung der Originaldatei geschrieben: {BACKUP_FILE}")
+                backup_written = True
+
+            write_output(original, questions, HEADER_FILE)
 
         elif choice == "3":
+            if original is None:
+                print("Bitte zuerst den Header einlesen (Option 1).")
+                continue
+
             questions = balance_per_category(questions)
             print("\nVerteilung je Kategorie:")
             per_cat = count_correct_per_category(questions)
@@ -298,16 +312,26 @@ if __name__ == "__main__":
                 print(f"  {cat}: {cnt}")
 
         elif choice == "4":
+            if questions is None:
+                print("Keine Fragen eingelesen.")
+                continue
+
             export_json(questions, "quiz_export.json")
 
         elif choice == "5":
+            if questions is None:
+                print("Keine Fragen eingelesen.")
+                continue
+
             export_excel(questions, "quiz_export.xlsx")
 
         elif choice == "6":
             questions = import_json("quiz_export.json")
+            print(f"{len(questions)} Fragen importiert.")
 
         elif choice == "7":
             questions = import_excel("quiz_export.xlsx")
+            print(f"{len(questions)} Fragen importiert.")
 
         elif choice == "8":
             print("Beendet.")
