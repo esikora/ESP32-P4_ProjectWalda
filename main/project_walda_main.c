@@ -232,17 +232,18 @@ static void create_quiz_ui_once(void)
     lv_obj_set_style_radius(ui.question_label, 16, LV_PART_MAIN);
     lv_obj_set_style_pad_all(ui.question_label, 20, LV_PART_MAIN);
 
-    // Score label (top-left)
+    // Score label (bottom left)
     ui.score_label = lv_label_create(ui.root);
-    lv_obj_set_style_text_font(ui.score_label, &lv_font_dejavu_16_german, LV_PART_MAIN);
-    lv_obj_set_style_text_color(ui.score_label, WWTBAM_WHITE, LV_PART_MAIN);
-    lv_obj_align(ui.score_label, LV_ALIGN_TOP_LEFT, 10, 10);
+    lv_obj_set_style_text_font(ui.score_label, &lv_font_dejavu_18_german, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui.score_label, WWTBAM_GOLD, LV_PART_MAIN);
+    lv_obj_align(ui.score_label, LV_ALIGN_BOTTOM_LEFT, 10, -10);
 
-    // Countdown label (bottom middle)
+    // Countdown label (bottom right)
     ui.countdown_label = lv_label_create(ui.root);
     lv_obj_set_style_text_font(ui.countdown_label, &lv_font_dejavu_18_german, LV_PART_MAIN);
     lv_obj_set_style_text_color(ui.countdown_label, WWTBAM_GOLD, LV_PART_MAIN);
-    lv_obj_align(ui.countdown_label, LV_ALIGN_BOTTOM_LEFT, 10, -10);
+    lv_obj_set_style_text_align(ui.countdown_label, LV_TEXT_ALIGN_RIGHT, LV_PART_MAIN);
+    lv_obj_align(ui.countdown_label, LV_ALIGN_BOTTOM_RIGHT, -10, -10);
 
     // System message label (bottom center - used for reactions and instructions)
     ui.system_message_label = lv_label_create(ui.root);
@@ -335,6 +336,18 @@ static void update_countdown_display(void)
     char buf[32];
     snprintf(buf, sizeof(buf), "Zeit: %d", timer_remaining);
     lv_label_set_text(ui.countdown_label, buf);
+
+    if (timer_remaining <= 0) {
+        lv_obj_set_style_text_color(ui.countdown_label, LV_COLOR_RED, LV_PART_MAIN);
+        return;
+    }
+
+    if (timer_remaining <= 5) {
+        lv_obj_set_style_text_color(ui.countdown_label, WWTBAM_ORANGE_DARK, LV_PART_MAIN);
+        return;
+    }
+
+    lv_obj_set_style_text_color(ui.countdown_label, WWTBAM_GREEN_DARK, LV_PART_MAIN);
 }
 
 static void show_question_ui(int q_index)
