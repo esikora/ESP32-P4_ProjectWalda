@@ -34,7 +34,7 @@ typedef struct {
 } quiz_question_t;
 
 // ===============================================
-//  Quiz Questions (100 total)
+//  Quiz Questions
 // ===============================================
 quiz_question_t quiz_questions[] = {
     { "Wie viele Tage hat ein Schaltjahr?", "365", "366", "367", 'B', 'L', CAT_ALLGEMEIN, "Richtig! Ein Schaltjahr hat 366 Tage.", "Falsch! Ein Schaltjahr hat 366 Tage." },
@@ -137,602 +137,92 @@ quiz_question_t quiz_questions[] = {
     { "Welches Gerät dient zur Eingabe?", "Monitor", "Lautsprecher", "Maus", 'C', 'L', CAT_TECHNIK, "Richtig! Die Maus ist ein Eingabegerät.", "Falsch! Die Maus ist ein Eingabegerät." },
     { "Was ist Open Source?", "Kostenlose Software", "Software ohne Lizenz", "Quelloffene Software", 'C', 'H', CAT_TECHNIK, "Richtig! Open Source bedeutet quelloffen.", "Falsch! Open Source bedeutet quelloffen." },
     { "Welche Programmiersprache wird oft für Webentwicklung genutzt?", "Python", "C", "JavaScript", 'C', 'L', CAT_TECHNIK, "Richtig! JavaScript wird häufig im Web genutzt.", "Falsch! JavaScript wird häufig im Web genutzt." },
-    {
-        "Was ist Geocaching?",
-        "Eine GPS-basierte Schatzsuche", "Ein Kartenspiel", "Ein Navigationsfehler",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Geocaching ist eine GPS-basierte Schatzsuche.",
-        "Falsch! Geocaching ist eine GPS-basierte Schatzsuche."
-    },
-    {
-        "Wann wurde Geocaching offiziell gestartet?",
-        "2000", "1995", "2005",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Geocaching begann im Jahr 2000.",
-        "Falsch! Geocaching begann im Jahr 2000."
-    },
-    {
-        "Was feiert der Blue Switch Day?",
-        "Abschaltung von Selective Availability", "Erfindung des GPS", "Start von Project A.P.E.",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! 2000 wurde Selective Availability deaktiviert.",
-        "Falsch! Es geht um die Abschaltung von Selective Availability."
-    },
-    {
-        "Welche Firma betreibt geocaching.com?",
-        "Groundspeak", "Geoworld", "CacheCorp",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Groundspeak betreibt geocaching.com.",
-        "Falsch! Groundspeak betreibt geocaching.com."
-    },
-    {
-        "Was ist ein Traditional Cache?",
-        "Ein Cache an den veröffentlichten Koordinaten", "Ein Cache ohne Dose", "Ein Cache mit mehreren Stationen",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Traditionals liegen direkt an den Koordinaten.",
-        "Falsch! Traditionals liegen direkt an den Koordinaten."
-    },
-    {
-        "Was ist ein Multi-Cache?",
-        "Ein Cache mit mehreren Stationen", "Ein Cache ohne Logbuch", "Ein Cache mit Webcam",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Multis haben mehrere Stationen.",
-        "Falsch! Multis haben mehrere Stationen."
-    },
-    {
-        "Was ist ein Mystery-Cache?",
-        "Ein Rätsel-Cache", "Ein Cache im Wasser", "Ein Cache ohne Koordinaten",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Mystery-Caches erfordern ein Rätsel.",
-        "Falsch! Mystery-Caches erfordern ein Rätsel."
-    },
-    {
-        "Was ist ein EarthCache?",
-        "Ein Cache ohne Dose mit geologischen Aufgaben", "Ein Cache im Weltall", "Ein Cache mit Metallbehälter",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! EarthCaches haben keine Dose und vermitteln Geologie.",
-        "Falsch! EarthCaches haben keine Dose und vermitteln Geologie."
-    },
-    {
-        "Was ist ein Letterbox Hybrid?",
-        "Ein Cache mit Stempel", "Ein Cache ohne Koordinaten", "Ein Cache mit Webcam",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Letterbox Hybrids enthalten einen Stempel.",
-        "Falsch! Letterbox Hybrids enthalten einen Stempel."
-    },
-    {
-        "Was ist ein Event-Cache?",
-        "Ein Treffen von Geocachern", "Ein Cache ohne Dose", "Ein Cache mit mehreren Stationen",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Event-Caches sind Treffen von Geocachern.",
-        "Falsch! Event-Caches sind Treffen von Geocachern."
-    },
-    {
-        "Was ist ein CITO-Event?",
-        "Ein Umweltreinigungs-Event", "Ein Trackable-Tausch", "Ein Reviewer-Treffen",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! CITO-Events dienen der Umwelt.",
-        "Falsch! CITO-Events sind Umweltaktionen."
-    },
-    {
-        "Wie viele Teilnehmer braucht ein MEGA-Event?",
-        "500+", "1000+", "250+",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Mega-Events haben mindestens 500 Teilnehmer.",
-        "Falsch! Mega-Events haben mindestens 500 Teilnehmer."
-    },
-    {
-        "Wie viele Teilnehmer braucht ein GIGA-Event?",
-        "5000+", "1000+", "2500+",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Giga-Events haben mindestens 5000 Teilnehmer.",
-        "Falsch! Giga-Events haben mindestens 5000 Teilnehmer."
-    },
-    {
-        "Was ist ein Wherigo-Cache?",
-        "Ein Cartridge-basiertes GPS-Abenteuer", "Ein Cache im Wasser", "Ein Cache mit QR-Code",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Wherigo nutzt Cartridge-basierte Abenteuer.",
-        "Falsch! Wherigo nutzt Cartridge-basierte Abenteuer."
-    },
-    {
-        "Was ist ein Geocaching-HQ-Cache?",
-        "Ein Cache im Besucherzentrum des HQ", "Ein Cache im Wald", "Ein Cache im Wasser",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! HQ-Caches liegen im Besucherzentrum.",
-        "Falsch! HQ-Caches liegen im Besucherzentrum."
-    },
-    {
-        "Was ist ein GPS Adventure Maze?",
-        "Eine GPS-Ausstellung", "Ein Virtual Cache", "Ein Mystery",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! GPS Adventure Maze ist eine Ausstellung.",
-        "Falsch! Es ist eine GPS-Ausstellung."
-    },
-    {
-        "Was ist ein Adventure Lab?",
-        "Ein app-basiertes Erlebnis ohne Dose", "Ein Multi-Cache", "Ein Virtual Reward",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Adventure Labs haben keine Dose.",
-        "Falsch! Adventure Labs haben keine Dose."
-    },
-    {
-        "Was ist ein Virtual Cache?",
-        "Ein Cache ohne Dose", "Ein Cache mit Stempel", "Ein Cache im Wasser",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Virtuals haben keine Dose.",
-        "Falsch! Virtuals haben keine Dose."
-    },
-    {
-        "Was ist ein Webcam-Cache?",
-        "Ein Cache, der ein Webcam-Foto erfordert", "Ein Cache mit QR-Code", "Ein Cache ohne Logbuch",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Webcam-Caches verlangen ein Webcam-Foto.",
-        "Falsch! Webcam-Caches verlangen ein Webcam-Foto."
-    },
-    {
-        "Was ist ein Project A.P.E. Cache?",
-        "Ein Cache aus einer Filmkampagne", "Ein EarthCache", "Ein Virtual",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Project A.P.E. war eine Filmkampagne.",
-        "Falsch! Project A.P.E. war eine Filmkampagne."
-    },
-    {
-        "Wie viele der vierzehn Project A.P.E. Caches existieren heute noch?",
-        "2", "14", "0",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Es existieren nur noch zwei.",
-        "Falsch! Es existieren nur noch zwei."
-    },
-    {
-        "Was ist ein Locationless Cache?",
-        "Ein Cache ohne festen Ort", "Ein Cache im Ausland", "Ein Cache ohne Logbuch",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Locationless Caches haben keinen festen Ort.",
-        "Falsch! Locationless Caches haben keinen festen Ort."
-    },
-    {
-        "Was ist ein GIFF-Event?",
-        "Ein Geocaching-Filmfestival", "Eine Geocaching-Fotoausstellung", "Eine Art Schrottwichteln",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! GIFF ist ein Filmfestival.",
-        "Falsch! GIFF ist ein Filmfestival."
-    },
-    {
-        "Was ist ein Community Celebration Event (CCE)?",
-        "Ein Jubiläums-Eventtyp", "Vortreffen vor einem CITO", "Tauschbörse für Mystery-Lösungen",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! CCEs feiern Meilensteine.",
-        "Falsch! CCEs feiern Meilensteine."
-    },
-    {
-        "Was ist eine Geocaching Block Party?",
-        "Feier eines Meilensteinjahrs", "Ein Mega-Event in Europa", "Ein Filmfestival",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Die Block Party fand am HQ statt.",
-        "Falsch! Die Block Party fand am HQ statt."
-    },
-    {
-        "Was ist ein 'Hider'?",
-        "Der Verstecker eines Caches", "Der Finder eines Caches", "Der Reviewer",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Der Hider versteckt den Cache.",
-        "Falsch! Der Hider ist der Verstecker."
-    },
-    {
-        "Was macht ein Reviewer?",
-        "Neue Listings prüfen", "Caches reparieren", "Events organisieren",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Reviewer prüfen neue Listings.",
-        "Falsch! Reviewer prüfen neue Listings."
-    },
-    {
-        "Was ist ein Trackable?",
-        "Ein verfolgbares Objekt", "Ein Cachetyp", "Ein GPS-Gerät",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Trackables sind verfolgbar.",
-        "Falsch! Trackables sind verfolgbar."
-    },
-    {
-        "Was ist ein Geocoin?",
-        "Eine sammelbare Metallmünze", "Währung im Geocaching-Shop", "Ein Referenzpunkt im Gelände",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Geocoins sind sammelbare Münzen.",
-        "Falsch! Geocoins sind sammelbare Münzen."
-    },
-    {
-        "Was bedeutet DNF?",
-        "Did Not Find", "Do Not Follow", "Double No Find",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! DNF bedeutet nicht gefunden.",
-        "Falsch! DNF bedeutet Did Not Find."
-    },
-    {
-        "Was bedeutet FTF?",
-        "First To Find", "Fast Track Find", "Follow The Finder",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! FTF bedeutet Erster Finder.",
-        "Falsch! FTF bedeutet First To Find."
-    },
-    {
-        "Was muss ein 'Hider' vor dem Veröffentlichen tun?",
-        "Listing erstellen und Regeln beachten", "Reviewer bezahlen", "GPS registrieren",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Regeln und Listing sind Pflicht.",
-        "Falsch! Der Hider muss Regeln und Listing beachten."
-    },
-    {
-        "Was prüfen Reviewer vor der Freigabe?",
-        "Regelkonformität", "Cachegröße", "Schwierigkeit",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Reviewer prüfen die Einhaltung der Regeln.",
-        "Falsch! Reviewer prüfen die Regelkonformität."
-    },
-    {
-        "Was bedeutet T5 bei der T-Wertung?",
-        "Sehr anspruchsvolles Gelände", "Leichtes Gelände", "Nur im Winter machbar",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! T5 bedeutet schweres Gelände.",
-        "Falsch! T5 bedeutet schweres Gelände."
-    },
-    {
-        "Was bedeutet D5 bei der D-Wertung?",
-        "Sehr schwieriges Rätsel", "Sehr leichter Cache", "Nur für Profis logbar",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! D5 bedeutet höchste Rätselschwierigkeit.",
-        "Falsch! D5 bedeutet höchste Rätselschwierigkeit."
-    },
-    {
-        "Was ist OpenCaching (OC)?",
-        "Eine alternative Geocaching-Plattform", "Ein GPS-Standard", "Ein Cachetyp",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! OC ist eine alternative Plattform.",
-        "Falsch! OC ist eine alternative Plattform."
-    },
-    {
-        "Welche Cachegröße entspricht 'Regular'?",
-        "Etwa 1 Liter", "10 Liter", "0,1 Liter",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Regular entspricht etwa 1 Liter.",
-        "Falsch! Regular entspricht etwa 1 Liter."
-    },
-    {
-        "Was ist ein Nano-Cache?",
-        "Ein extrem kleiner Cache", "Ein Cache im Wasser", "Ein Cache mit Rätsel",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Nanos sind winzig.",
-        "Falsch! Nanos sind extrem klein."
-    },
-    {
-        "Was ist ein Bonus-Cache?",
-        "Ein zusätzlicher Cache nach Aufgaben", "Ein Cache ohne Behälter", "Belohnung für einen FTF",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Bonus-Caches ergänzen andere Caches.",
-        "Falsch! Bonus-Caches ergänzen andere Caches."
-    },
-    {
-        "Was ist ein HQ Celebration Event?",
-        "Geocaching-Jubiläum in Seattle", "Event mit 500.000+ Teilnehmern", "Geburtstag des GPS",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! HQ Celebrations feiern Meilensteine.",
-        "Falsch! HQ Celebrations feiern Meilensteine."
-    },
-    {
-        "Was ist GC43?",
-        "Der älteste Cache Europas", "Der erste EarthCache", "Der erste Mystery",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! GC43 ist Europas ältester Cache.",
-        "Falsch! GC43 ist Europas ältester Cache."
-    },
-    {
-        "Wo liegt GC40?",
-        "Belgien", "Irland", "Deutschland",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! GC40 liegt in Belgien.",
-        "Falsch! GC40 liegt in Belgien."
-    },
-    {
-        "Welcher Cache hatte lange die meisten Favoritenpunkte?",
-        "Lego - einer ist zu viel", "Project APE", "Europe's First",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Der Lego-Cache hatte über 11.500 FP.",
-        "Falsch! Es war der Lego-Cache."
-    },
-    {
-        "Warum wurde GC13Y2Y archiviert?",
-        "Beschädigte Giraffe", "Regelverstoß", "Reviewer hat sich verklickt",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Die Giraffe war beschädigt.",
-        "Falsch! Die Giraffe war beschädigt."
-    },
-    {
-        "Was ist ein Adventure Lab Bonus?",
-        "Ein zusätzlicher Cache nach Abschluss eines Labs", "Ein Virtual", "Ein EarthCache",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Bonus-Caches ergänzen Adventure Labs.",
-        "Falsch! Bonus-Caches ergänzen Adventure Labs."
-    },
-    {
-        "Was war ursprünglich eine 'Block Party'?",
-        "Ein Event-Cache am HQ", "Event in Kanada", "Vorläufer vom Oktoberfest",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Die Block Party war ein HQ-Event.",
-        "Falsch! Die Block Party war ein HQ-Event."
-    },
-    {
-        "Was ist ein Locationless Cache?",
-        "Cache ohne feste Koordinaten", "Gemuggelter Cache", "Archivierter Cache",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Neue Locationless Caches sind Event-basiert.",
-        "Falsch! Neue Locationless Caches sind Event-basiert."
-    },
-    {
-        "Was ist ein Challenge Cache?",
-        "Ein Cache mit Logbedingung", "Ein Tik-Tok-Phänomen", "Eine Diät für Geocacher",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Challenge Caches haben Logbedingungen.",
-        "Falsch! Challenge Caches haben Logbedingungen."
-    },
-    {
-        "Was ist ein Premium-Only Cache?",
-        "Nur für Premium-Mitglieder sichtbar", "Nur für Reviewer sichtbar", "Nur bei Events sichtbar",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Premium-Only Caches sind nur für Premium-Mitglieder sichtbar.",
-        "Falsch! Premium-Only Caches sind nur für Premium-Mitglieder sichtbar."
-    },
-    {
-        "Welche Mindestabstandsregel gilt zwischen zwei Geocaches?",
-        "161 Meter", "50 Meter", "500 Meter",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Die 161-Meter-Regel gilt weltweit.",
-        "Falsch! Es sind 161 Meter."
-    },
-    {
-        "Was bedeutet das Attribut 'Stealth Required'?",
-        "Unauffälliges Verhalten nötig", "Nur nachts machbar", "Nur mit Werkzeug machbar",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Man soll unauffällig suchen.",
-        "Falsch! Es bedeutet unauffälliges Verhalten."
-    },
-    {
-        "Was bedeutet das Attribut 'Tiere vor Ort'?",
-        "Es können Tiere anwesend sein", "Der Cache ist ein Tier", "Es ist ein Zoo-Cache",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Tiere können vor Ort sein.",
-        "Falsch! Es bedeutet Tiere vor Ort."
-    },
-    {
-        "Was bedeutet die D-Wertung?",
-        "Schwierigkeit des Rätsels oder Verstecks", "Nur an Wochentagen mit 'D' verfügbar", "Cachegröße",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! D steht für Difficulty.",
-        "Falsch! D steht für Difficulty."
-    },
-    {
-        "Was bedeutet die T-Wertung?",
-        "Geländeschwierigkeit", "Rätselschwierigkeit", "Cachegröße",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! T steht für Terrain.",
-        "Falsch! T steht für Terrain."
-    },
-    {
-        "Welche Kombination ist die schwierigste?",
-        "D5/T5", "D1/T1", "D7/T7",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! D5/T5 ist die höchste Schwierigkeit.",
-        "Falsch! D5/T5 ist die höchste Schwierigkeit."
-    },
-    {
-        "Was ist ein 'Needs Maintenance'-Log?",
-        "Hinweis auf Probleme am Cache", "Hinweis auf FTF", "Hinweis auf Reviewer in der Nähe",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Es weist auf Probleme hin.",
-        "Falsch! Es weist auf Probleme hin."
-    },
-    {
-        "Was ist ein 'Needs Archived'-Log?",
-        "Bitte um Archivierung", "Bitte um FTF", "Bitte um neue Dose",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Es fordert Archivierung an.",
-        "Falsch! Es fordert Archivierung an."
-    },
-    {
-        "Wer darf einen Cache archivieren?",
-        "Reviewer oder HQ", "Jeder Finder", "Nur der Owner",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Reviewer oder HQ können archivieren.",
-        "Falsch! Reviewer oder HQ archivieren."
-    },
-    {
-        "Was ist ein 'Owner Maintenance'-Log?",
-        "Der Owner bestätigt Wartung", "Der Owner löscht Logs", "Der Owner ändert Koordinaten",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Der Owner bestätigt Wartung.",
-        "Falsch! Der Owner bestätigt Wartung."
-    },
-    {
-        "Was ist ein 'Write Note'-Log?",
-        "Ein neutraler Hinweis", "Ein Fundlog", "Ein DNF",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Es ist ein neutraler Hinweis.",
-        "Falsch! Es ist ein neutraler Hinweis."
-    },
-    {
-        "Was ist ein 'Watchlist'-Eintrag?",
-        "Benachrichtigungen über Logs", "Ein Favoritenpunkt", "Ein Trackable",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Man erhält Log-Benachrichtigungen.",
-        "Falsch! Es sind Log-Benachrichtigungen."
-    },
-    {
-        "Was ist ein Favoritenpunkt?",
-        "Auszeichnung für gute Caches", "Ein Trackable", "Ein Souvenir",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Favoritenpunkte zeichnen gute Caches aus.",
-        "Falsch! Favoritenpunkte zeichnen gute Caches aus."
-    },
-    {
-        "Wie erhält man Favoritenpunkte?",
-        "Durch Funde als Premium-Mitglied", "Durch Rätsel lösen", "Durch Reviewer",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Premium-Mitglieder erhalten FP durch Funde.",
-        "Falsch! Premium-Mitglieder erhalten FP durch Funde."
-    },
-    {
-        "Was ist ein Souvenir?",
-        "Digitale Auszeichnung", "Ein Trackable", "Ein Logbuch",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Souvenirs sind digitale Auszeichnungen.",
-        "Falsch! Souvenirs sind digitale Auszeichnungen."
-    },
-    {
-        "Wann erhält man Souvenirs?",
-        "Bei bestimmten Aktionen oder Orten", "Bei jedem Fund", "Nur bei Events",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Souvenirs gibt es zu Aktionen oder Orten.",
-        "Falsch! Souvenirs gibt es zu Aktionen oder Orten."
-    },
-    {
-        "Was ist ein 'Jasmer-Challenge'?",
-        "Finde Caches aus jedem Monat seit 2000", "Finde 1000 Caches", "Finde alle Cachetypen",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Jasmer verlangt Funde aus jedem Monat seit 2000.",
-        "Falsch! Jasmer verlangt Funde aus jedem Monat seit 2000."
-    },
-    {
-        "Was ist ein '365er Grid'?",
-        "Jeden Kalendertag einen Fund", "365 Mysterys", "365 EarthCaches",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Es geht um tägliche Funde.",
-        "Falsch! Es geht um tägliche Funde."
-    },
-    {
-        "Was ist ein 'D/T-Matrix'-Grid?",
-        "Alle 81 D/T-Kombinationen finden", "81 Mysterys lösen", "81 Events besuchen",
-        'A','H', CAT_GEOCACHING,
-        "Richtig! Es geht um alle 81 Kombinationen.",
-        "Falsch! Es geht um alle 81 Kombinationen."
-    },
-    {
-        "Was ist ein 'Powertrail'?",
-        "Viele Caches in Serie", "Ein einzelner T5", "Ein Event",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Powertrails bestehen aus vielen Caches.",
-        "Falsch! Powertrails bestehen aus vielen Caches."
-    },
-    {
-        "Was ist eine 'Geoart'?",
-        "Bild aus Caches auf der Karte", "Eine besondere Bergkette", "Eine Geocaching-Kunstausstellung",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Geoarts bilden Bilder auf der Karte.",
-        "Falsch! Geoarts bilden Bilder auf der Karte."
-    },
-    {
-        "Was ist ein 'FTF-Run'?",
-        "Schnelles Losfahren nach Publish", "Ein Marathon", "Ein Event",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! FTF-Runs sind schnelle Fahrten nach Publish.",
-        "Falsch! Es ist ein schneller Start nach Publish."
-    },
-    {
-        "Was ist eine 'Reviewer Note'?",
-        "Nachricht an Reviewer", "Nachricht an Finder", "Nachricht an Owner",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Reviewer Notes sind für Reviewer.",
-        "Falsch! Reviewer Notes sind für Reviewer."
-    },
-    {
-        "Was ist ein 'Publish-Log'?",
-        "Reviewer veröffentlicht Cache", "Owner archiviert Cache", "Finder loggt Cache",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Reviewer veröffentlichen Caches.",
-        "Falsch! Reviewer veröffentlichen Caches."
-    },
-    {
-        "Was ist ein 'Beta-Test' bei Caches?",
-        "Vorab-Test durch andere Cacher", "Test durch Reviewer", "Test durch HQ",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Beta-Tester prüfen Caches vorab.",
-        "Falsch! Beta-Tester prüfen Caches vorab."
-    },
-    {
-        "Was ist ein 'Spoiler' im Geocaching?",
-        "Information, die das Rätsel verrät", "Ein Trackable", "Ein Event",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Spoiler verraten Lösungen.",
-        "Falsch! Spoiler verraten Lösungen."
-    },
-    {
-        "Was ist ein 'Proxy' bei Geocoins?",
-        "Ersatz für eine echte Coin", "Ein Virtual", "Ein Mystery",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Proxys ersetzen echte Coins.",
-        "Falsch! Proxys ersetzen echte Coins."
-    },
-    {
-        "Was ist ein 'Travel Bug Hotel'?",
-        "Cache zum Tauschen von Trackables", "Ein Event", "Ein Mystery",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! TB-Hotels dienen Trackables.",
-        "Falsch! TB-Hotels dienen Trackables."
-    },
-    {
-        "Was ist eine 'GeoTour'?",
-        "Offizielle Serie thematischer Caches", "Ein Powertrail", "Ein Virtual",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! GeoTours sind thematische Serien.",
-        "Falsch! GeoTours sind thematische Serien."
-    },
-    {
-        "Was ist ein 'Cache Owner'?",
-        "Der Besitzer des Caches", "Der erste Finder", "Der Reviewer",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Der Owner besitzt den Cache.",
-        "Falsch! Der Owner besitzt den Cache."
-    },
-    {
-        "Was ist ein 'Cache Listing'?",
-        "Die Beschreibung des Caches", "Das Logbuch", "Der Container",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Das Listing beschreibt den Cache.",
-        "Falsch! Das Listing beschreibt den Cache."
-    },
-    {
-        "Was ist ein 'Hint'?",
-        "verschlüsselter Hinweis im Listing", "ein Trackable im Cache", "ein Logeintrag",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Hints sind verschlüsselte Hinweise.",
-        "Falsch! Hints sind verschlüsselte Hinweise."
-    },
-    {
-        "Was ist ein 'Cache Container'?",
-        "der Behälter des Caches", "ein Ersatzlogbuch", "Versandbox für Trackables",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Der Container enthält das Logbuch.",
-        "Falsch! Der Container enthält das Logbuch."
-    },
-    {
-        "Was ist ein 'Logbuch'?",
-        "Buch zum Eintragen für Finder", "Tagebuch eines Cachers", "Liste von Reviewer-Beanstandungen",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Das Logbuch dient zum Eintragen.",
-        "Falsch! Das Logbuch dient zum Eintragen."
-    },
-    {
-        "Was sind 'Cache-Attribute'?",
-        "Zusatzinformationen im Listing", "Sammelobjekte", "Tauschgegenstände",
-        'A','L', CAT_GEOCACHING,
-        "Richtig! Attribute geben Zusatzinformationen.",
-        "Falsch! Attribute geben Zusatzinformationen."
-    },
-    {
-        "Was ist ein 'Reviewer Disable'?",
-        "Temporäre Deaktivierung durch Reviewer", "Dauerhafte Deaktivierung durch Reviewer", "Cache-Veröffentlichung durch Reviewer",
-        'A','M', CAT_GEOCACHING,
-        "Richtig! Reviewer können Caches temporär deaktivieren.",
-        "Falsch! Reviewer können Caches temporär deaktivieren."
-    }
-}; // Ende des Arrays mit 100 Fragen
+    { "Was ist Geocaching?", "Eine GPS-basierte Schatzsuche", "Ein Kartenspiel", "Ein Navigationsfehler", 'A', 'L', CAT_GEOCACHING, "Richtig! Geocaching ist eine GPS-basierte Schatzsuche.", "Falsch! Geocaching ist eine GPS-basierte Schatzsuche." },
+    { "Wann wurde Geocaching offiziell gestartet?", "2000", "1995", "2005", 'A', 'M', CAT_GEOCACHING, "Richtig! Geocaching begann im Jahr 2000.", "Falsch! Geocaching begann im Jahr 2000." },
+    { "Was feiert der Blue Switch Day?", "Abschaltung von Selective Availability", "Erfindung des GPS", "Start von Project A.P.E.", 'A', 'H', CAT_GEOCACHING, "Richtig! 2000 wurde Selective Availability deaktiviert.", "Falsch! Es geht um die Abschaltung von Selective Availability." },
+    { "Welche Firma betreibt geocaching.com?", "Groundspeak", "Geoworld", "CacheCorp", 'A', 'L', CAT_GEOCACHING, "Richtig! Groundspeak betreibt geocaching.com.", "Falsch! Groundspeak betreibt geocaching.com." },
+    { "Was ist ein Traditional Cache?", "Ein Cache an den veröffentlichten Koordinaten", "Ein Cache ohne Dose", "Ein Cache mit mehreren Stationen", 'A', 'L', CAT_GEOCACHING, "Richtig! Traditionals liegen direkt an den Koordinaten.", "Falsch! Traditionals liegen direkt an den Koordinaten." },
+    { "Was ist ein Multi-Cache?", "Ein Cache mit mehreren Stationen", "Ein Cache ohne Logbuch", "Ein Cache mit Webcam", 'A', 'M', CAT_GEOCACHING, "Richtig! Multis haben mehrere Stationen.", "Falsch! Multis haben mehrere Stationen." },
+    { "Was ist ein Mystery-Cache?", "Ein Rätsel-Cache", "Ein Cache im Wasser", "Ein Cache ohne Koordinaten", 'A', 'M', CAT_GEOCACHING, "Richtig! Mystery-Caches erfordern ein Rätsel.", "Falsch! Mystery-Caches erfordern ein Rätsel." },
+    { "Was ist ein EarthCache?", "Ein Cache ohne Dose mit geologischen Aufgaben", "Ein Cache im Weltall", "Ein Cache mit Metallbehälter", 'A', 'H', CAT_GEOCACHING, "Richtig! EarthCaches haben keine Dose und vermitteln Geologie.", "Falsch! EarthCaches haben keine Dose und vermitteln Geologie." },
+    { "Was ist ein Letterbox Hybrid?", "Ein Cache mit Stempel", "Ein Cache ohne Koordinaten", "Ein Cache mit Webcam", 'A', 'M', CAT_GEOCACHING, "Richtig! Letterbox Hybrids enthalten einen Stempel.", "Falsch! Letterbox Hybrids enthalten einen Stempel." },
+    { "Was ist ein Event-Cache?", "Ein Treffen von Geocachern", "Ein Cache ohne Dose", "Ein Cache mit mehreren Stationen", 'A', 'L', CAT_GEOCACHING, "Richtig! Event-Caches sind Treffen von Geocachern.", "Falsch! Event-Caches sind Treffen von Geocachern." },
+    { "Was ist ein CITO-Event?", "Ein Umweltreinigungs-Event", "Ein Trackable-Tausch", "Ein Reviewer-Treffen", 'A', 'L', CAT_GEOCACHING, "Richtig! CITO-Events dienen der Umwelt.", "Falsch! CITO-Events sind Umweltaktionen." },
+    { "Wie viele Teilnehmer braucht ein MEGA-Event?", "500+", "1000+", "250+", 'A', 'M', CAT_GEOCACHING, "Richtig! Mega-Events haben mindestens 500 Teilnehmer.", "Falsch! Mega-Events haben mindestens 500 Teilnehmer." },
+    { "Wie viele Teilnehmer braucht ein GIGA-Event?", "5000+", "1000+", "2500+", 'A', 'H', CAT_GEOCACHING, "Richtig! Giga-Events haben mindestens 5000 Teilnehmer.", "Falsch! Giga-Events haben mindestens 5000 Teilnehmer." },
+    { "Was ist ein Wherigo-Cache?", "Ein Cartridge-basiertes GPS-Abenteuer", "Ein Cache im Wasser", "Ein Cache mit QR-Code", 'A', 'H', CAT_GEOCACHING, "Richtig! Wherigo nutzt Cartridge-basierte Abenteuer.", "Falsch! Wherigo nutzt Cartridge-basierte Abenteuer." },
+    { "Was ist ein Geocaching-HQ-Cache?", "Ein Cache im Besucherzentrum des HQ", "Ein Cache im Wald", "Ein Cache im Wasser", 'A', 'L', CAT_GEOCACHING, "Richtig! HQ-Caches liegen im Besucherzentrum.", "Falsch! HQ-Caches liegen im Besucherzentrum." },
+    { "Was ist ein GPS Adventure Maze?", "Eine GPS-Ausstellung", "Ein Virtual Cache", "Ein Mystery", 'A', 'M', CAT_GEOCACHING, "Richtig! GPS Adventure Maze ist eine Ausstellung.", "Falsch! Es ist eine GPS-Ausstellung." },
+    { "Was ist ein Adventure Lab?", "Ein app-basiertes Erlebnis ohne Dose", "Ein Multi-Cache", "Ein Virtual Reward", 'A', 'M', CAT_GEOCACHING, "Richtig! Adventure Labs haben keine Dose.", "Falsch! Adventure Labs haben keine Dose." },
+    { "Was ist ein Virtual Cache?", "Ein Cache ohne Dose", "Ein Cache mit Stempel", "Ein Cache im Wasser", 'A', 'L', CAT_GEOCACHING, "Richtig! Virtuals haben keine Dose.", "Falsch! Virtuals haben keine Dose." },
+    { "Was ist ein Webcam-Cache?", "Ein Cache, der ein Webcam-Foto erfordert", "Ein Cache mit QR-Code", "Ein Cache ohne Logbuch", 'A', 'M', CAT_GEOCACHING, "Richtig! Webcam-Caches verlangen ein Webcam-Foto.", "Falsch! Webcam-Caches verlangen ein Webcam-Foto." },
+    { "Was ist ein Project A.P.E. Cache?", "Ein Cache aus einer Filmkampagne", "Ein EarthCache", "Ein Virtual", 'A', 'H', CAT_GEOCACHING, "Richtig! Project A.P.E. war eine Filmkampagne.", "Falsch! Project A.P.E. war eine Filmkampagne." },
+    { "Wie viele der vierzehn Project A.P.E. Caches existieren heute noch?", "2", "14", "0", 'A', 'H', CAT_GEOCACHING, "Richtig! Es existieren nur noch zwei.", "Falsch! Es existieren nur noch zwei." },
+    { "Was ist ein Locationless Cache?", "Ein Cache ohne festen Ort", "Ein Cache im Ausland", "Ein Cache ohne Logbuch", 'A', 'H', CAT_GEOCACHING, "Richtig! Locationless Caches haben keinen festen Ort.", "Falsch! Locationless Caches haben keinen festen Ort." },
+    { "Was ist ein GIFF-Event?", "Ein Geocaching-Filmfestival", "Eine Geocaching-Fotoausstellung", "Eine Art Schrottwichteln", 'A', 'M', CAT_GEOCACHING, "Richtig! GIFF ist ein Filmfestival.", "Falsch! GIFF ist ein Filmfestival." },
+    { "Was ist ein Community Celebration Event (CCE)?", "Ein Jubiläums-Eventtyp", "Vortreffen vor einem CITO", "Tauschbörse für Mystery-Lösungen", 'A', 'M', CAT_GEOCACHING, "Richtig! CCEs feiern Meilensteine.", "Falsch! CCEs feiern Meilensteine." },
+    { "Was ist eine Geocaching Block Party?", "Feier eines Meilensteinjahrs", "Ein Mega-Event in Europa", "Ein Filmfestival", 'A', 'H', CAT_GEOCACHING, "Richtig! Die Block Party fand am HQ statt.", "Falsch! Die Block Party fand am HQ statt." },
+    { "Was ist ein 'Hider'?", "Der Verstecker eines Caches", "Der Finder eines Caches", "Der Reviewer", 'A', 'L', CAT_GEOCACHING, "Richtig! Der Hider versteckt den Cache.", "Falsch! Der Hider ist der Verstecker." },
+    { "Was macht ein Reviewer?", "Neue Listings prüfen", "Caches reparieren", "Events organisieren", 'A', 'M', CAT_GEOCACHING, "Richtig! Reviewer prüfen neue Listings.", "Falsch! Reviewer prüfen neue Listings." },
+    { "Was ist ein Trackable?", "Ein verfolgbares Objekt", "Ein Cachetyp", "Ein GPS-Gerät", 'A', 'L', CAT_GEOCACHING, "Richtig! Trackables sind verfolgbar.", "Falsch! Trackables sind verfolgbar." },
+    { "Was ist ein Geocoin?", "Eine sammelbare Metallmünze", "Währung im Geocaching-Shop", "Ein Referenzpunkt im Gelände", 'A', 'L', CAT_GEOCACHING, "Richtig! Geocoins sind sammelbare Münzen.", "Falsch! Geocoins sind sammelbare Münzen." },
+    { "Was bedeutet DNF?", "Double No Find", "Do Not Follow", "Did Not Find", 'C', 'L', CAT_GEOCACHING, "Richtig! DNF bedeutet nicht gefunden.", "Falsch! DNF bedeutet Did Not Find." },
+    { "Was bedeutet FTF?", "Fast Track Find", "First To Find", "Follow The Finder", 'B', 'M', CAT_GEOCACHING, "Richtig! FTF bedeutet Erster Finder.", "Falsch! FTF bedeutet First To Find." },
+    { "Was muss ein 'Hider' vor dem Veröffentlichen tun?", "GPS registrieren", "Reviewer bezahlen", "Listing erstellen und Regeln beachten", 'C', 'M', CAT_GEOCACHING, "Richtig! Regeln und Listing sind Pflicht.", "Falsch! Der Hider muss Regeln und Listing beachten." },
+    { "Was prüfen Reviewer vor der Freigabe?", "Cachegröße", "Regelkonformität", "Schwierigkeit", 'B', 'H', CAT_GEOCACHING, "Richtig! Reviewer prüfen die Einhaltung der Regeln.", "Falsch! Reviewer prüfen die Regelkonformität." },
+    { "Was bedeutet T5 bei der T-Wertung?", "Nur im Winter machbar", "Leichtes Gelände", "Sehr anspruchsvolles Gelände", 'C', 'H', CAT_GEOCACHING, "Richtig! T5 bedeutet schweres Gelände.", "Falsch! T5 bedeutet schweres Gelände." },
+    { "Was bedeutet D5 bei der D-Wertung?", "Sehr leichter Cache", "Sehr schwieriges Rätsel", "Nur für Profis logbar", 'B', 'H', CAT_GEOCACHING, "Richtig! D5 bedeutet höchste Rätselschwierigkeit.", "Falsch! D5 bedeutet höchste Rätselschwierigkeit." },
+    { "Was ist OpenCaching (OC)?", "Ein Cachetyp", "Ein GPS-Standard", "Eine alternative Geocaching-Plattform", 'C', 'M', CAT_GEOCACHING, "Richtig! OC ist eine alternative Plattform.", "Falsch! OC ist eine alternative Plattform." },
+    { "Welche Cachegröße entspricht 'Regular'?", "10 Liter", "Etwa 1 Liter", "0,1 Liter", 'B', 'M', CAT_GEOCACHING, "Richtig! Regular entspricht etwa 1 Liter.", "Falsch! Regular entspricht etwa 1 Liter." },
+    { "Was ist ein Nano-Cache?", "Ein Cache mit Rätsel", "Ein Cache im Wasser", "Ein extrem kleiner Cache", 'C', 'L', CAT_GEOCACHING, "Richtig! Nanos sind winzig.", "Falsch! Nanos sind extrem klein." },
+    { "Was ist ein Bonus-Cache?", "Ein Cache ohne Behälter", "Ein zusätzlicher Cache nach Aufgaben", "Belohnung für einen FTF", 'B', 'M', CAT_GEOCACHING, "Richtig! Bonus-Caches ergänzen andere Caches.", "Falsch! Bonus-Caches ergänzen andere Caches." },
+    { "Was ist ein HQ Celebration Event?", "Geburtstag des GPS", "Event mit 500.000+ Teilnehmern", "Geocaching-Jubiläum in Seattle", 'C', 'M', CAT_GEOCACHING, "Richtig! HQ Celebrations feiern Meilensteine.", "Falsch! HQ Celebrations feiern Meilensteine." },
+    { "Was ist GC43?", "Der erste EarthCache", "Der älteste Cache Europas", "Der erste Mystery", 'B', 'H', CAT_GEOCACHING, "Richtig! GC43 ist Europas ältester Cache.", "Falsch! GC43 ist Europas ältester Cache." },
+    { "Wo liegt GC40?", "Deutschland", "Irland", "Belgien", 'C', 'H', CAT_GEOCACHING, "Richtig! GC40 liegt in Belgien.", "Falsch! GC40 liegt in Belgien." },
+    { "Welcher Cache hatte lange die meisten Favoritenpunkte?", "Project APE", "Lego - einer ist zu viel", "Europe's First", 'B', 'H', CAT_GEOCACHING, "Richtig! Der Lego-Cache hatte über 11.500 FP.", "Falsch! Es war der Lego-Cache." },
+    { "Warum wurde GC13Y2Y archiviert?", "Reviewer hat sich verklickt", "Regelverstoß", "Beschädigte Giraffe", 'C', 'H', CAT_GEOCACHING, "Richtig! Die Giraffe war beschädigt.", "Falsch! Die Giraffe war beschädigt." },
+    { "Was ist ein Adventure Lab Bonus?", "Ein Virtual", "Ein zusätzlicher Cache nach Abschluss eines Labs", "Ein EarthCache", 'B', 'M', CAT_GEOCACHING, "Richtig! Bonus-Caches ergänzen Adventure Labs.", "Falsch! Bonus-Caches ergänzen Adventure Labs." },
+    { "Was war ursprünglich eine 'Block Party'?", "Vorläufer vom Oktoberfest", "Event in Kanada", "Ein Event-Cache am HQ", 'C', 'M', CAT_GEOCACHING, "Richtig! Die Block Party war ein HQ-Event.", "Falsch! Die Block Party war ein HQ-Event." },
+    { "Was ist ein Locationless Cache?", "Gemuggelter Cache", "Cache ohne feste Koordinaten", "Archivierter Cache", 'B', 'H', CAT_GEOCACHING, "Richtig! Neue Locationless Caches sind Event-basiert.", "Falsch! Neue Locationless Caches sind Event-basiert." },
+    { "Was ist ein Challenge Cache?", "Eine Diät für Geocacher", "Ein Tik-Tok-Phänomen", "Ein Cache mit Logbedingung", 'C', 'H', CAT_GEOCACHING, "Richtig! Challenge Caches haben Logbedingungen.", "Falsch! Challenge Caches haben Logbedingungen." },
+    { "Was ist ein Premium-Only Cache?", "Nur für Reviewer sichtbar", "Nur für Premium-Mitglieder sichtbar", "Nur bei Events sichtbar", 'B', 'L', CAT_GEOCACHING, "Richtig! Premium-Only Caches sind nur für Premium-Mitglieder sichtbar.", "Falsch! Premium-Only Caches sind nur für Premium-Mitglieder sichtbar." },
+    { "Welche Mindestabstandsregel gilt zwischen zwei Geocaches?", "500 Meter", "50 Meter", "161 Meter", 'C', 'H', CAT_GEOCACHING, "Richtig! Die 161-Meter-Regel gilt weltweit.", "Falsch! Es sind 161 Meter." },
+    { "Was bedeutet das Attribut 'Stealth Required'?", "Nur nachts machbar", "Unauffälliges Verhalten nötig", "Nur mit Werkzeug machbar", 'B', 'M', CAT_GEOCACHING, "Richtig! Man soll unauffällig suchen.", "Falsch! Es bedeutet unauffälliges Verhalten." },
+    { "Was bedeutet das Attribut 'Tiere vor Ort'?", "Es ist ein Zoo-Cache", "Der Cache ist ein Tier", "Es können Tiere anwesend sein", 'C', 'L', CAT_GEOCACHING, "Richtig! Tiere können vor Ort sein.", "Falsch! Es bedeutet Tiere vor Ort." },
+    { "Was bedeutet die D-Wertung?", "Nur an Wochentagen mit 'D' verfügbar", "Schwierigkeit des Rätsels oder Verstecks", "Cachegröße", 'B', 'L', CAT_GEOCACHING, "Richtig! D steht für Difficulty.", "Falsch! D steht für Difficulty." },
+    { "Was bedeutet die T-Wertung?", "Cachegröße", "Rätselschwierigkeit", "Geländeschwierigkeit", 'C', 'L', CAT_GEOCACHING, "Richtig! T steht für Terrain.", "Falsch! T steht für Terrain." },
+    { "Welche Kombination ist die schwierigste?", "D1/T1", "D5/T5", "D7/T7", 'B', 'M', CAT_GEOCACHING, "Richtig! D5/T5 ist die höchste Schwierigkeit.", "Falsch! D5/T5 ist die höchste Schwierigkeit." },
+    { "Was ist ein 'Needs Maintenance'-Log?", "Hinweis auf Reviewer in der Nähe", "Hinweis auf FTF", "Hinweis auf Probleme am Cache", 'C', 'L', CAT_GEOCACHING, "Richtig! Es weist auf Probleme hin.", "Falsch! Es weist auf Probleme hin." },
+    { "Was ist ein 'Needs Archived'-Log?", "Bitte um FTF", "Bitte um Archivierung", "Bitte um neue Dose", 'B', 'H', CAT_GEOCACHING, "Richtig! Es fordert Archivierung an.", "Falsch! Es fordert Archivierung an." },
+    { "Wer darf einen Cache archivieren?", "Nur der Owner", "Jeder Finder", "Reviewer oder HQ", 'C', 'H', CAT_GEOCACHING, "Richtig! Reviewer oder HQ können archivieren.", "Falsch! Reviewer oder HQ archivieren." },
+    { "Was ist ein 'Owner Maintenance'-Log?", "Der Owner löscht Logs", "Der Owner bestätigt Wartung", "Der Owner ändert Koordinaten", 'B', 'L', CAT_GEOCACHING, "Richtig! Der Owner bestätigt Wartung.", "Falsch! Der Owner bestätigt Wartung." },
+    { "Was ist ein 'Write Note'-Log?", "Ein DNF", "Ein Fundlog", "Ein neutraler Hinweis", 'C', 'L', CAT_GEOCACHING, "Richtig! Es ist ein neutraler Hinweis.", "Falsch! Es ist ein neutraler Hinweis." },
+    { "Was ist ein 'Watchlist'-Eintrag?", "Ein Favoritenpunkt", "Benachrichtigungen über Logs", "Ein Trackable", 'B', 'M', CAT_GEOCACHING, "Richtig! Man erhält Log-Benachrichtigungen.", "Falsch! Es sind Log-Benachrichtigungen." },
+    { "Was ist ein Favoritenpunkt?", "Ein Souvenir", "Ein Trackable", "Auszeichnung für gute Caches", 'C', 'L', CAT_GEOCACHING, "Richtig! Favoritenpunkte zeichnen gute Caches aus.", "Falsch! Favoritenpunkte zeichnen gute Caches aus." },
+    { "Wie erhält man Favoritenpunkte?", "Durch Rätsel lösen", "Durch Funde als Premium-Mitglied", "Durch Reviewer", 'B', 'M', CAT_GEOCACHING, "Richtig! Premium-Mitglieder erhalten FP durch Funde.", "Falsch! Premium-Mitglieder erhalten FP durch Funde." },
+    { "Was ist ein Souvenir?", "Ein Logbuch", "Ein Trackable", "Digitale Auszeichnung", 'C', 'L', CAT_GEOCACHING, "Richtig! Souvenirs sind digitale Auszeichnungen.", "Falsch! Souvenirs sind digitale Auszeichnungen." },
+    { "Wann erhält man Souvenirs?", "Bei jedem Fund", "Bei bestimmten Aktionen oder Orten", "Nur bei Events", 'B', 'M', CAT_GEOCACHING, "Richtig! Souvenirs gibt es zu Aktionen oder Orten.", "Falsch! Souvenirs gibt es zu Aktionen oder Orten." },
+    { "Was ist ein 'Jasmer-Challenge'?", "Finde alle Cachetypen", "Finde 1000 Caches", "Finde Caches aus jedem Monat seit 2000", 'C', 'H', CAT_GEOCACHING, "Richtig! Jasmer verlangt Funde aus jedem Monat seit 2000.", "Falsch! Jasmer verlangt Funde aus jedem Monat seit 2000." },
+    { "Was ist ein '365er Grid'?", "365 Mysterys", "Jeden Kalendertag einen Fund", "365 EarthCaches", 'B', 'H', CAT_GEOCACHING, "Richtig! Es geht um tägliche Funde.", "Falsch! Es geht um tägliche Funde." },
+    { "Was ist ein 'D/T-Matrix'-Grid?", "81 Events besuchen", "81 Mysterys lösen", "Alle 81 D/T-Kombinationen finden", 'C', 'H', CAT_GEOCACHING, "Richtig! Es geht um alle 81 Kombinationen.", "Falsch! Es geht um alle 81 Kombinationen." },
+    { "Was ist ein 'Powertrail'?", "Ein einzelner T5", "Viele Caches in Serie", "Ein Event", 'B', 'L', CAT_GEOCACHING, "Richtig! Powertrails bestehen aus vielen Caches.", "Falsch! Powertrails bestehen aus vielen Caches." },
+    { "Was ist eine 'Geoart'?", "Eine Geocaching-Kunstausstellung", "Eine besondere Bergkette", "Bild aus Caches auf der Karte", 'C', 'M', CAT_GEOCACHING, "Richtig! Geoarts bilden Bilder auf der Karte.", "Falsch! Geoarts bilden Bilder auf der Karte." },
+    { "Was ist ein 'FTF-Run'?", "Ein Marathon", "Schnelles Losfahren nach Publish", "Ein Event", 'B', 'L', CAT_GEOCACHING, "Richtig! FTF-Runs sind schnelle Fahrten nach Publish.", "Falsch! Es ist ein schneller Start nach Publish." },
+    { "Was ist eine 'Reviewer Note'?", "Nachricht an Owner", "Nachricht an Finder", "Nachricht an Reviewer", 'C', 'M', CAT_GEOCACHING, "Richtig! Reviewer Notes sind für Reviewer.", "Falsch! Reviewer Notes sind für Reviewer." },
+    { "Was ist ein 'Publish-Log'?", "Owner archiviert Cache", "Reviewer veröffentlicht Cache", "Finder loggt Cache", 'B', 'L', CAT_GEOCACHING, "Richtig! Reviewer veröffentlichen Caches.", "Falsch! Reviewer veröffentlichen Caches." },
+    { "Was ist ein 'Beta-Test' bei Caches?", "Test durch HQ", "Test durch Reviewer", "Vorab-Test durch andere Cacher", 'C', 'M', CAT_GEOCACHING, "Richtig! Beta-Tester prüfen Caches vorab.", "Falsch! Beta-Tester prüfen Caches vorab." },
+    { "Was ist ein 'Spoiler' im Geocaching?", "Ein Trackable", "Information, die das Rätsel verrät", "Ein Event", 'B', 'L', CAT_GEOCACHING, "Richtig! Spoiler verraten Lösungen.", "Falsch! Spoiler verraten Lösungen." },
+    { "Was ist ein 'Proxy' bei Geocoins?", "Ein Mystery", "Ein Virtual", "Ersatz für eine echte Coin", 'C', 'M', CAT_GEOCACHING, "Richtig! Proxys ersetzen echte Coins.", "Falsch! Proxys ersetzen echte Coins." },
+    { "Was ist ein 'Travel Bug Hotel'?", "Ein Event", "Cache zum Tauschen von Trackables", "Ein Mystery", 'B', 'L', CAT_GEOCACHING, "Richtig! TB-Hotels dienen Trackables.", "Falsch! TB-Hotels dienen Trackables." },
+    { "Was ist eine 'GeoTour'?", "Ein Virtual", "Ein Powertrail", "Offizielle Serie thematischer Caches", 'C', 'M', CAT_GEOCACHING, "Richtig! GeoTours sind thematische Serien.", "Falsch! GeoTours sind thematische Serien." },
+    { "Was ist ein 'Cache Owner'?", "Der erste Finder", "Der Besitzer des Caches", "Der Reviewer", 'B', 'L', CAT_GEOCACHING, "Richtig! Der Owner besitzt den Cache.", "Falsch! Der Owner besitzt den Cache." },
+    { "Was ist ein 'Cache Listing'?", "Der Container", "Das Logbuch", "Die Beschreibung des Caches", 'C', 'L', CAT_GEOCACHING, "Richtig! Das Listing beschreibt den Cache.", "Falsch! Das Listing beschreibt den Cache." },
+    { "Was ist ein 'Hint'?", "ein Trackable im Cache", "verschlüsselter Hinweis im Listing", "ein Logeintrag", 'B', 'L', CAT_GEOCACHING, "Richtig! Hints sind verschlüsselte Hinweise.", "Falsch! Hints sind verschlüsselte Hinweise." },
+    { "Was ist ein 'Cache Container'?", "Versandbox für Trackables", "ein Ersatzlogbuch", "der Behälter des Caches", 'C', 'L', CAT_GEOCACHING, "Richtig! Der Container enthält das Logbuch.", "Falsch! Der Container enthält das Logbuch." },
+    { "Was ist ein 'Logbuch'?", "Tagebuch eines Cachers", "Buch zum Eintragen für Finder", "Liste von Reviewer-Beanstandungen", 'B', 'L', CAT_GEOCACHING, "Richtig! Das Logbuch dient zum Eintragen.", "Falsch! Das Logbuch dient zum Eintragen." },
+    { "Was sind 'Cache-Attribute'?", "Tauschgegenstände", "Sammelobjekte", "Zusatzinformationen im Listing", 'C', 'L', CAT_GEOCACHING, "Richtig! Attribute geben Zusatzinformationen.", "Falsch! Attribute geben Zusatzinformationen." },
+    { "Was ist ein 'Reviewer Disable'?", "Dauerhafte Deaktivierung durch Reviewer", "Temporäre Deaktivierung durch Reviewer", "Cache-Veröffentlichung durch Reviewer", 'B', 'M', CAT_GEOCACHING, "Richtig! Reviewer können Caches temporär deaktivieren.", "Falsch! Reviewer können Caches temporär deaktivieren." },
+}; // Ende des Arrays mit Fragen
 
 #define NUM_QUIZ_QUESTIONS (sizeof(quiz_questions) / sizeof(quiz_question_t))
 
